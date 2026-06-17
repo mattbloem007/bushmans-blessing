@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  /* Dust Grey */
+  --color-dust-grey-50: #f5f2f0;
+  --color-dust-grey-100: #eae6e1;
+  --color-dust-grey-200: #d6cdc2;
+  --color-dust-grey-600: #796853;
+  --color-dust-grey-950: #15120e;
+
+  /* Rusty Spice */
+  --color-rusty-spice-500: #fe5101;
+  --color-rusty-spice-600: #cb4101;
+
+  /* Saddle Brown */
+  --color-saddle-brown-500: #d0672f;
+
+  /* Black (deep blue-slate) */
+  --color-black-900: #0c1827;
+  --color-black-950: #08111b;
+
+  /* Rust Brown */
+  --color-rust-brown-500: #f0560f;
+
+  /* Typography */
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+}

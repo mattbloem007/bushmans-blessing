@@ -1,0 +1,17 @@
+# Build output
+.cache
+public
+
+# Dependencies
+node_modules
+
+# Environment secrets
+.env.development
+.env.production
+.env.local
+
+# OS
+.DS_Store
+
+# Netlify
+.netlify
