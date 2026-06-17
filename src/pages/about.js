@@ -4,6 +4,8 @@ import Layout from '../components/Layout'
 import RichText from '../components/RichText'
 import EyeSymbol from '../components/icons/EyeSymbol'
 import ElandSilhouette from '../components/icons/ElandSilhouette'
+import BushmanFigure from '../components/icons/BushmanFigure'
+import WavyDivider from '../components/WavyDivider'
 import { useInView } from '../hooks/useInView'
 
 export default function AboutPage({ data }) {
@@ -19,7 +21,7 @@ export default function AboutPage({ data }) {
     <Layout heroPage>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
-        className="relative min-h-[70vh] flex items-center justify-center text-center px-6"
+        className="relative min-h-[70vh] flex items-center justify-center text-center px-6 overflow-hidden"
         style={{
           background: 'linear-gradient(160deg, var(--color-black-950) 0%, var(--color-black-900) 100%)',
         }}
@@ -29,6 +31,18 @@ export default function AboutPage({ data }) {
           size={300}
           color="#fe5101"
           className="absolute right-0 bottom-0 opacity-5 pointer-events-none"
+        />
+        {/* San figures in background */}
+        <BushmanFigure
+          size={180}
+          color="#fe5101"
+          className="absolute left-8 bottom-12 opacity-[0.07] pointer-events-none"
+        />
+        <BushmanFigure
+          size={120}
+          color="#fe5101"
+          className="absolute left-36 bottom-20 opacity-[0.04] pointer-events-none"
+          style={{ transform: 'scaleX(-1)' }}
         />
 
         <div className="relative max-w-3xl mx-auto pt-28 pb-16">
@@ -64,14 +78,24 @@ export default function AboutPage({ data }) {
               className="text-lg leading-relaxed"
             />
           )}
+
+          {/* Wavy ornament before pull-quote section */}
+          <div className="mt-20 opacity-20">
+            <WavyDivider color="var(--color-saddle-brown-500)" />
+          </div>
         </div>
       </section>
 
       {/* ── Pull quote ───────────────────────────────────────────────────── */}
       <section
-        className="grain py-24 md:py-32 px-6"
+        className="grain py-24 md:py-32 px-6 relative overflow-hidden"
         style={{ background: 'var(--color-black-900)' }}
       >
+        <BushmanFigure
+          size={260}
+          color="#fe5101"
+          className="absolute -right-4 top-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none"
+        />
         <div
           ref={quoteRef}
           className={`max-w-4xl mx-auto text-center fade-up ${quoteInView ? 'in-view' : ''}`}

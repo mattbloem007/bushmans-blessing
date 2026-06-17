@@ -2,6 +2,9 @@ import React, { useRef, useState } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import EyeSymbol from '../components/icons/EyeSymbol'
+import BushmanFigure from '../components/icons/BushmanFigure'
+import WavyDivider from '../components/WavyDivider'
+import EntopticDots from '../components/icons/EntopticDots'
 import { useInView } from '../hooks/useInView'
 
 const MAX_CHARS = 1000
@@ -192,11 +195,22 @@ export default function ExperiencesPage({ data }) {
           <p className="text-dust-grey-200 text-lg leading-relaxed">
             Real experiences from people who have sat with Kanna — shared freely, published with care.
           </p>
+          <div className="mt-10 opacity-15">
+            <WavyDivider color="var(--color-dust-grey-200)" />
+          </div>
         </div>
       </section>
 
       {/* ── Experience wall ───────────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 bg-dust-grey-50">
+      <section className="py-20 md:py-28 px-6 bg-dust-grey-50 relative overflow-hidden">
+        <EntopticDots
+          rows={3}
+          cols={14}
+          gap={16}
+          dotSize={2}
+          color="var(--color-saddle-brown-500)"
+          className="absolute bottom-6 left-0 opacity-[0.07] pointer-events-none"
+        />
         <div className="max-w-6xl mx-auto">
           {experiences.length === 0 ? (
             <div className="text-center py-16">
@@ -223,9 +237,20 @@ export default function ExperiencesPage({ data }) {
 
       {/* ── Submission form ───────────────────────────────────────────────── */}
       <section
-        className="grain py-24 md:py-32 px-6"
+        className="grain py-24 md:py-32 px-6 relative overflow-hidden"
         style={{ background: 'var(--color-black-900)' }}
       >
+        <BushmanFigure
+          size={200}
+          color="#fe5101"
+          className="absolute left-6 bottom-8 opacity-[0.06] pointer-events-none"
+        />
+        <BushmanFigure
+          size={140}
+          color="#fe5101"
+          className="absolute right-10 top-12 opacity-[0.04] pointer-events-none"
+          style={{ transform: 'scaleX(-1)' }}
+        />
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <EyeSymbol size={48} color="#fe5101" className="mx-auto mb-6" />

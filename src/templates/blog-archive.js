@@ -3,6 +3,8 @@ import { graphql, Link } from 'gatsby'
 import Layout from '../components/Layout'
 import PostCard from '../components/PostCard'
 import EyeSymbol from '../components/icons/EyeSymbol'
+import WavyDivider from '../components/WavyDivider'
+import EntopticDots from '../components/icons/EntopticDots'
 
 export default function BlogArchivePage({ data, pageContext }) {
   const posts = data.allContentfulBlogPost.nodes
@@ -16,10 +18,26 @@ export default function BlogArchivePage({ data, pageContext }) {
     <Layout heroPage>
       {/* Hero */}
       <section
-        className="py-32 md:py-40 px-6 text-center"
+        className="py-32 md:py-40 px-6 text-center relative overflow-hidden"
         style={{ background: 'var(--color-black-950)' }}
       >
-        <div className="max-w-3xl mx-auto pt-8">
+        <EntopticDots
+          rows={4}
+          cols={20}
+          gap={16}
+          dotSize={2}
+          color="#fe5101"
+          className="absolute top-0 left-0 opacity-[0.05] pointer-events-none"
+        />
+        <EntopticDots
+          rows={4}
+          cols={20}
+          gap={16}
+          dotSize={2}
+          color="#fe5101"
+          className="absolute bottom-0 right-0 opacity-[0.05] pointer-events-none"
+        />
+        <div className="relative max-w-3xl mx-auto pt-8">
           <EyeSymbol size={48} color="#fe5101" className="mx-auto mb-8" />
           <p className="text-rusty-spice-500 text-xs uppercase tracking-[0.25em] mb-4 font-medium">
             Writing
@@ -38,6 +56,9 @@ export default function BlogArchivePage({ data, pageContext }) {
           <p className="text-dust-grey-200 text-lg leading-relaxed">
             Stories, science, and slow wisdom from the world of Kanna.
           </p>
+          <div className="mt-10 opacity-15">
+            <WavyDivider color="var(--color-dust-grey-200)" />
+          </div>
         </div>
       </section>
 

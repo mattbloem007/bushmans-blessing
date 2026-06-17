@@ -3,6 +3,8 @@ import { graphql, Link } from 'gatsby'
 import Layout from '../components/Layout'
 import RichText from '../components/RichText'
 import EyeSymbol from '../components/icons/EyeSymbol'
+import BushmanFigure from '../components/icons/BushmanFigure'
+import WavyDivider from '../components/WavyDivider'
 import { useInView } from '../hooks/useInView'
 
 function FeaturedQuote({ authorName, location, story, delay = '' }) {
@@ -87,9 +89,8 @@ export default function HomePage({ data }) {
         </div>
 
         {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-dust-grey-600">
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-dust-grey-600 to-transparent" />
+        <div className="absolute bottom-8 left-0 right-0 px-8 opacity-10">
+          <WavyDivider color="var(--color-dust-grey-200)" />
         </div>
       </section>
 
@@ -107,8 +108,12 @@ export default function HomePage({ data }) {
           )}
         </div>
 
-        {/* Eye symbol divider */}
-        <div className="flex justify-center mt-16">
+        {/* Wavy line ornament */}
+        <div className="mt-16 opacity-20">
+          <WavyDivider color="var(--color-saddle-brown-500)" />
+        </div>
+
+        <div className="flex justify-center mt-10">
           <EyeSymbol size={48} color="#d0672f" />
         </div>
       </section>
@@ -116,9 +121,21 @@ export default function HomePage({ data }) {
       {/* ── Featured Experiences ──────────────────────────────────────────── */}
       {experiences.length > 0 && (
         <section
-          className="grain py-24 md:py-32 px-6"
+          className="grain py-24 md:py-32 px-6 relative overflow-hidden"
           style={{ background: 'var(--color-black-900)' }}
         >
+          {/* Background San figures */}
+          <BushmanFigure
+            size={220}
+            color="#fe5101"
+            className="absolute bottom-6 left-6 opacity-[0.06] pointer-events-none"
+          />
+          <BushmanFigure
+            size={160}
+            color="#fe5101"
+            className="absolute top-10 right-10 opacity-[0.04] pointer-events-none"
+            style={{ transform: 'scaleX(-1)' }}
+          />
           <div className="max-w-6xl mx-auto">
             <div
               ref={expRef}

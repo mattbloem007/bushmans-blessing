@@ -5,6 +5,9 @@ import Layout from '../components/Layout'
 import RichText from '../components/RichText'
 import EyeSymbol from '../components/icons/EyeSymbol'
 import ElandSilhouette from '../components/icons/ElandSilhouette'
+import BushmanFigure from '../components/icons/BushmanFigure'
+import WavyDivider from '../components/WavyDivider'
+import EntopticDots from '../components/icons/EntopticDots'
 import { useInView } from '../hooks/useInView'
 
 export default function KannaPage({ data }) {
@@ -53,9 +56,8 @@ export default function KannaPage({ data }) {
             {page?.heroSubheading}
           </p>
         </div>
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center text-dust-grey-600">
-          <p className="text-xs uppercase tracking-[0.2em] mb-2">The Story</p>
-          <div className="w-px h-12 bg-gradient-to-b from-dust-grey-600 to-transparent mx-auto" />
+        <div className="absolute bottom-8 left-0 right-0 px-8 opacity-10">
+          <WavyDivider color="var(--color-dust-grey-200)" />
         </div>
       </section>
 
@@ -83,9 +85,14 @@ export default function KannaPage({ data }) {
               {page?.traditionalUse && (
                 <RichText content={page.traditionalUse} className="text-base md:text-lg" />
               )}
+              {/* Wavy ornament after text */}
+              <div className="mt-10 opacity-20">
+                <WavyDivider color="var(--color-saddle-brown-500)" />
+              </div>
             </div>
-            <div className="flex justify-center lg:justify-end">
-              <ElandSilhouette size={260} color="#d0672f" className="opacity-30" />
+            <div className="flex flex-col items-center lg:items-end gap-8">
+              <ElandSilhouette size={240} color="#d0672f" className="opacity-30" />
+              <BushmanFigure size={90} color="#d0672f" className="opacity-25 mr-8" />
             </div>
           </div>
         </div>
@@ -93,9 +100,18 @@ export default function KannaPage({ data }) {
 
       {/* ── Science Section ───────────────────────────────────────────────── */}
       <section
-        className="grain py-24 md:py-32 px-6"
+        className="grain py-24 md:py-32 px-6 relative overflow-hidden"
         style={{ background: 'var(--color-black-900)' }}
       >
+        {/* Entoptic dot pattern — echoes molecular/cellular imagery */}
+        <EntopticDots
+          rows={5}
+          cols={18}
+          gap={16}
+          dotSize={2}
+          color="#fe5101"
+          className="absolute top-8 right-0 opacity-[0.06] pointer-events-none"
+        />
         <div
           ref={scienceRef}
           className={`max-w-6xl mx-auto fade-up ${scienceInView ? 'in-view' : ''}`}
