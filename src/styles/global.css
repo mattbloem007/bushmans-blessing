@@ -3,10 +3,10 @@
 @import "tailwindcss";
 
 @theme {
-  /* Dust Grey */
-  --color-dust-grey-50: #f5f2f0;
-  --color-dust-grey-100: #eae6e1;
-  --color-dust-grey-200: #d6cdc2;
+  /* Dust Grey — warm sandy tones */
+  --color-dust-grey-50: #D9D1C7;
+  --color-dust-grey-100: #C9BDB0;
+  --color-dust-grey-200: #B5A695;
   --color-dust-grey-600: #796853;
   --color-dust-grey-950: #15120e;
 
@@ -17,9 +17,9 @@
   /* Saddle Brown */
   --color-saddle-brown-500: #d0672f;
 
-  /* Black (deep blue-slate) */
-  --color-black-900: #0c1827;
-  --color-black-950: #08111b;
+  /* Dark earthy red-brown (replaces navy) */
+  --color-black-900: #4A1A06;
+  --color-black-950: #261004;
 
   /* Rust Brown */
   --color-rust-brown-500: #f0560f;
