@@ -103,15 +103,17 @@ export default function KannaPage({ data }) {
         className="grain py-24 md:py-32 px-6 relative overflow-hidden"
         style={{ background: 'var(--color-black-900)' }}
       >
-        {/* Entoptic dot pattern — echoes molecular/cellular imagery */}
-        <EntopticDots
-          rows={5}
-          cols={18}
-          gap={16}
-          dotSize={2}
-          color="#fe5101"
-          className="absolute top-8 right-0 opacity-[0.06] pointer-events-none"
-        />
+        {/* Decorative layer — inline style overrides .grain > * position:relative */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <EntopticDots
+            rows={5}
+            cols={18}
+            gap={16}
+            dotSize={2}
+            color="#fe5101"
+            className="absolute top-8 right-0 opacity-[0.06]"
+          />
+        </div>
         <div
           ref={scienceRef}
           className={`max-w-6xl mx-auto fade-up ${scienceInView ? 'in-view' : ''}`}

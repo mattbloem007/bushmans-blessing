@@ -240,17 +240,16 @@ export default function ExperiencesPage({ data }) {
         className="grain py-24 md:py-32 px-6 relative overflow-hidden"
         style={{ background: 'var(--color-black-900)' }}
       >
-        <BushmanFigure
-          size={200}
-          color="#fe5101"
-          className="absolute left-6 bottom-8 opacity-[0.06] pointer-events-none"
-        />
-        <BushmanFigure
-          size={140}
-          color="#fe5101"
-          className="absolute right-10 top-12 opacity-[0.04] pointer-events-none"
-          style={{ transform: 'scaleX(-1)' }}
-        />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <BushmanFigure
+            size={200}
+            color="#fe5101"
+            className="absolute left-6 bottom-8 opacity-[0.06]"
+          />
+          <div className="absolute right-10 top-12 opacity-[0.04]" style={{ transform: 'scaleX(-1)' }}>
+            <BushmanFigure size={140} color="#fe5101" />
+          </div>
+        </div>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <EyeSymbol size={48} color="#fe5101" className="mx-auto mb-6" />

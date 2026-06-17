@@ -124,18 +124,17 @@ export default function HomePage({ data }) {
           className="grain py-24 md:py-32 px-6 relative overflow-hidden"
           style={{ background: 'var(--color-black-900)' }}
         >
-          {/* Background San figures */}
-          <BushmanFigure
-            size={220}
-            color="#fe5101"
-            className="absolute bottom-6 left-6 opacity-[0.06] pointer-events-none"
-          />
-          <BushmanFigure
-            size={160}
-            color="#fe5101"
-            className="absolute top-10 right-10 opacity-[0.04] pointer-events-none"
-            style={{ transform: 'scaleX(-1)' }}
-          />
+          {/* Decorative layer — inline style overrides .grain > * position:relative */}
+          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+            <BushmanFigure
+              size={220}
+              color="#fe5101"
+              className="absolute bottom-6 left-6 opacity-[0.06]"
+            />
+            <div className="absolute top-10 right-10 opacity-[0.04]" style={{ transform: 'scaleX(-1)' }}>
+              <BushmanFigure size={160} color="#fe5101" />
+            </div>
+          </div>
           <div className="max-w-6xl mx-auto">
             <div
               ref={expRef}

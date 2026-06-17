@@ -80,7 +80,7 @@ export default function AboutPage({ data }) {
           )}
 
           {/* Wavy ornament before pull-quote section */}
-          <div className="mt-20 opacity-20">
+          <div className="mt-10 opacity-20">
             <WavyDivider color="var(--color-saddle-brown-500)" />
           </div>
         </div>
@@ -91,11 +91,13 @@ export default function AboutPage({ data }) {
         className="grain py-24 md:py-32 px-6 relative overflow-hidden"
         style={{ background: 'var(--color-black-900)' }}
       >
-        <BushmanFigure
-          size={260}
-          color="#fe5101"
-          className="absolute -right-4 top-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none"
-        />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <BushmanFigure
+            size={260}
+            color="#fe5101"
+            className="absolute -right-4 top-1/2 -translate-y-1/2 opacity-[0.05]"
+          />
+        </div>
         <div
           ref={quoteRef}
           className={`max-w-4xl mx-auto text-center fade-up ${quoteInView ? 'in-view' : ''}`}
