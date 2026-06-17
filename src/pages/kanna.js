@@ -205,8 +205,32 @@ export default function KannaPage({ data }) {
   )
 }
 
+export function Head({ data, location }) {
+  const site = data.site.siteMetadata
+  const page = data.contentfulKannaPage
+  const title = page?.seoTitle || `Kanna / Sceletium tortuosum | ${site.title}`
+  const description = page?.seoDescription || site.description
+  const canonical = `${site.siteUrl}${location.pathname}`
+  const ogImage = `${site.siteUrl}/og-image.svg`
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={canonical} />
+      <link rel="canonical" href={canonical} />
+    </>
+  )
+}
+
 export const query = graphql`
   query KannaPageQuery {
+    site {
+      siteMetadata { title siteUrl description }
+    }
     contentfulKannaPage(slug: { eq: "/kanna" }) {
       heroHeading
       heroSubheading
@@ -217,6 +241,8 @@ export const query = graphql`
         gatsbyImageData(width: 800, placeholder: BLURRED)
         title
       }
+      seoTitle
+      seoDescription
     }
   }
 `

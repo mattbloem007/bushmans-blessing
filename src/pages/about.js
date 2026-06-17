@@ -123,14 +123,40 @@ export default function AboutPage({ data }) {
   )
 }
 
+export function Head({ data, location }) {
+  const site = data.site.siteMetadata
+  const page = data.contentfulPage
+  const title = page?.seoTitle || site.title
+  const description = page?.seoDescription || site.description
+  const canonical = `${site.siteUrl}${location.pathname}`
+  const ogImage = `${site.siteUrl}/og-image.svg`
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={canonical} />
+      <link rel="canonical" href={canonical} />
+    </>
+  )
+}
+
 export const query = graphql`
   query AboutPageQuery {
+    site {
+      siteMetadata { title siteUrl description }
+    }
     contentfulPage(slug: { eq: "/about" }) {
       heroHeading
       heroSubheading
       bodyContent {
         raw
       }
+      seoTitle
+      seoDescription
     }
   }
 `

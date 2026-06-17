@@ -7,8 +7,10 @@ module.exports = {
   siteMetadata: {
     title: `Bushman's Blessing`,
     siteUrl: `https://bushman-blessing.netlify.app`,
+    description: `Ancient wisdom. Modern living. Kanna — the sacred plant of the San Bushmen of Southern Africa.`,
   },
   plugins: [
+    `gatsby-plugin-sitemap`,
     `gatsby-plugin-postcss`,
     `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,

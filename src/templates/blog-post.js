@@ -127,8 +127,32 @@ export default function BlogPostPage({ data }) {
   )
 }
 
+export function Head({ data, location }) {
+  const site = data.site.siteMetadata
+  const post = data.contentfulBlogPost
+  const title = post?.seoTitle || post?.title || site.title
+  const description = post?.seoDescription || site.description
+  const canonical = `${site.siteUrl}${location.pathname}`
+  const ogImage = post?.featuredImage?.url || `${site.siteUrl}/og-image.svg`
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content="article" />
+      <meta property="og:url" content={canonical} />
+      <link rel="canonical" href={canonical} />
+    </>
+  )
+}
+
 export const query = graphql`
   query BlogPostQuery($slug: String!) {
+    site {
+      siteMetadata { title siteUrl description }
+    }
     contentfulBlogPost(slug: { eq: $slug }) {
       title
       authorName
@@ -139,7 +163,10 @@ export const query = graphql`
       }
       featuredImage {
         gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED)
+        url
       }
+      seoTitle
+      seoDescription
     }
   }
 `

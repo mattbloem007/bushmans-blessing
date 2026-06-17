@@ -70,8 +70,32 @@ export default function BlogTagPage({ data, pageContext }) {
   )
 }
 
+export function Head({ data, location, pageContext }) {
+  const site = data.site.siteMetadata
+  const { tag } = pageContext
+  const title = `Posts tagged: ${tag} | ${site.title}`
+  const description = site.description
+  const canonical = `${site.siteUrl}${location.pathname}`
+  const ogImage = `${site.siteUrl}/og-image.svg`
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={canonical} />
+      <link rel="canonical" href={canonical} />
+    </>
+  )
+}
+
 export const query = graphql`
   query BlogTagQuery($tag: String!) {
+    site {
+      siteMetadata { title siteUrl description }
+    }
     allContentfulBlogPost(
       filter: { tags: { in: [$tag] } }
       sort: { publishDate: DESC }

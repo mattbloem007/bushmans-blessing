@@ -270,8 +270,31 @@ export default function ExperiencesPage({ data }) {
   )
 }
 
+export function Head({ data, location }) {
+  const site = data.site.siteMetadata
+  const title = `Community Experiences | ${site.title}`
+  const description = `Real experiences from people who have sat with Kanna — shared freely, published with care.`
+  const canonical = `${site.siteUrl}${location.pathname}`
+  const ogImage = `${site.siteUrl}/og-image.svg`
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={canonical} />
+      <link rel="canonical" href={canonical} />
+    </>
+  )
+}
+
 export const query = graphql`
   query ExperiencesPageQuery {
+    site {
+      siteMetadata { title siteUrl description }
+    }
     allContentfulExperience(sort: { dateFeatured: DESC }) {
       nodes {
         authorName
