@@ -193,7 +193,7 @@ export default function ExperiencesPage({ data }) {
             Their Words
           </h1>
           <p className="text-dust-grey-200 text-lg leading-relaxed">
-            Real experiences from people who have sat with Kanna — shared freely, published with care.
+            People who have sat with Kanna — sharing what they found. Real encounters, honest words, held with care.
           </p>
           <div className="mt-10 opacity-15">
             <WavyDivider color="var(--color-dust-grey-200)" />
@@ -257,10 +257,10 @@ export default function ExperiencesPage({ data }) {
               className="text-dust-grey-50 mb-4"
               style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)' }}
             >
-              Share Your Story
+              Add Your Voice to the Circle
             </h2>
             <p className="text-dust-grey-200 max-w-md mx-auto leading-relaxed">
-              Have you worked with Kanna? We'd love to hear what happened — in your own words, without pressure.
+              Kanna has always been a medicine passed between people — shared freely, spoken about openly, held in community. If it has touched you in some way, your words belong here.
             </p>
           </div>
           <SubmissionForm />
