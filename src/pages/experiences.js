@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
+import Seo from '../components/Seo'
 import EyeSymbol from '../components/icons/EyeSymbol'
 import BushmanFigure from '../components/icons/BushmanFigure'
 import WavyDivider from '../components/WavyDivider'
@@ -275,19 +276,7 @@ export function Head({ data, location }) {
   const title = `Community Experiences | ${site.title}`
   const description = `Real experiences from people who have sat with Kanna — shared freely, published with care.`
   const canonical = `${site.siteUrl}${location.pathname}`
-  const ogImage = `${site.siteUrl}/og-image.svg`
-  return (
-    <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content={canonical} />
-      <link rel="canonical" href={canonical} />
-    </>
-  )
+  return <Seo title={title} description={description} canonical={canonical} />
 }
 
 export const query = graphql`

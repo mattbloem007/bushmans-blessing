@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql, Link } from 'gatsby'
 import Layout from '../components/Layout'
+import Seo from '../components/Seo'
 import PostCard from '../components/PostCard'
 import EyeSymbol from '../components/icons/EyeSymbol'
 
@@ -76,19 +77,7 @@ export function Head({ data, location, pageContext }) {
   const title = `Posts tagged: ${tag} | ${site.title}`
   const description = site.description
   const canonical = `${site.siteUrl}${location.pathname}`
-  const ogImage = `${site.siteUrl}/og-image.svg`
-  return (
-    <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content={canonical} />
-      <link rel="canonical" href={canonical} />
-    </>
-  )
+  return <Seo title={title} description={description} canonical={canonical} />
 }
 
 export const query = graphql`

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
+import Seo from '../components/Seo'
 import RichText from '../components/RichText'
 import EyeSymbol from '../components/icons/EyeSymbol'
 import ElandSilhouette from '../components/icons/ElandSilhouette'
@@ -129,19 +130,7 @@ export function Head({ data, location }) {
   const title = page?.seoTitle || site.title
   const description = page?.seoDescription || site.description
   const canonical = `${site.siteUrl}${location.pathname}`
-  const ogImage = `${site.siteUrl}/og-image.svg`
-  return (
-    <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content={canonical} />
-      <link rel="canonical" href={canonical} />
-    </>
-  )
+  return <Seo title={title} description={description} canonical={canonical} />
 }
 
 export const query = graphql`

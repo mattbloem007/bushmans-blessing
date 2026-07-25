@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bushman-blessing.netlify.app/sitemap-index.xml

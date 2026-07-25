@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { graphql, Link } from 'gatsby'
+import { Document } from 'flexsearch'
 import Layout from '../components/Layout'
+import Seo from '../components/Seo'
 import PostCard from '../components/PostCard'
 import EyeSymbol from '../components/icons/EyeSymbol'
 import WavyDivider from '../components/WavyDivider'
@@ -16,17 +18,51 @@ export default function BlogArchivePage({ data, pageContext }) {
   const [query, setQuery] = useState('')
   const [activeTag, setActiveTag] = useState(null)
 
+  // Full-text search index (title + body + excerpt + tags), fetched from the
+  // static/search-index.json generated at build time by gatsby-node.js's
+  // onPostBuild hook. Falls back to title/excerpt substring matching while
+  // it loads (small dataset — loads near-instantly in practice).
+  const searchIndexRef = useRef(null)
+  const [indexReady, setIndexReady] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/search-index.json')
+      .then(res => res.json())
+      .then(posts => {
+        if (cancelled) return
+        const idx = new Document({
+          document: { id: 'slug', index: ['title', 'body', 'excerpt', 'tags'] },
+        })
+        posts.forEach(post => idx.add(post))
+        searchIndexRef.current = idx
+        setIndexReady(true)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
+  const matchedSlugs = useMemo(() => {
+    if (!query.trim() || !indexReady || !searchIndexRef.current) return null
+    const results = searchIndexRef.current.search(query, { enrich: false })
+    const slugs = new Set()
+    results.forEach(r => r.result.forEach(slug => slugs.add(slug)))
+    return slugs
+  }, [query, indexReady])
+
   const isFiltering = query.trim() !== '' || activeTag !== null
   const allTags = [...new Set(data.allPosts.nodes.flatMap(p => p.tags || []))]
 
   const displayPosts = isFiltering
     ? data.allPosts.nodes.filter(post => {
         const q = query.toLowerCase()
-        const matchesSearch =
-          !q ||
-          post.title.toLowerCase().includes(q) ||
-          (post.seoDescription || '').toLowerCase().includes(q) ||
-          (post.tags || []).some(t => t.toLowerCase().includes(q))
+        const matchesSearch = !q
+          ? true
+          : matchedSlugs
+            ? matchedSlugs.has(post.slug)
+            : post.title.toLowerCase().includes(q) ||
+              (post.seoDescription || '').toLowerCase().includes(q) ||
+              (post.tags || []).some(t => t.toLowerCase().includes(q))
         const matchesTag = !activeTag || (post.tags || []).includes(activeTag)
         return matchesSearch && matchesTag
       })
@@ -223,19 +259,7 @@ export function Head({ data, location }) {
   const title = `The Blog | ${site.title}`
   const description = `Stories, science, and slow wisdom from the world of Kanna.`
   const canonical = `${site.siteUrl}${location.pathname}`
-  const ogImage = `${site.siteUrl}/og-image.svg`
-  return (
-    <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content={canonical} />
-      <link rel="canonical" href={canonical} />
-    </>
-  )
+  return <Seo title={title} description={description} canonical={canonical} />
 }
 
 export const query = graphql`

@@ -37,6 +37,10 @@ const symbolArray = (id, name) => ({
   id, name, type: 'Array',
   items: { type: 'Symbol', validations: [] },
 })
+const entryArrayLink = (id, name, contentTypeIds) => ({
+  id, name, type: 'Array',
+  items: { type: 'Link', linkType: 'Entry', validations: [{ linkContentType: contentTypeIds }] },
+})
 
 // ── Content type creator ───────────────────────────────────────────────────
 
@@ -132,6 +136,20 @@ async function run() {
     intField('displayOrder', 'Display Order'),
   ])
 
+  await upsertContentType('product', 'Product', 'name', [
+    symbol('name', 'Name', true),
+    symbol('slug', 'Slug', true),
+    symbol('productType', 'Product Type'), // 'physical' | 'digital' | 'bundle'
+    richText('description', 'Description'),
+    intField('priceInCents', 'Price (cents, EUR)'),
+    assetLink('productImage', 'Product Image'),
+    boolField('inStock', 'In Stock'),
+    symbol('stripePriceId', 'Stripe Price ID'),
+    entryArrayLink('bundleItems', 'Bundle Items', ['product']), // unused today — reserved for future physical+digital bundles
+    symbol('seoTitle', 'SEO Title'),
+    symbol('seoDescription', 'SEO Description'),
+  ])
+
   await upsertContentType('siteSettings', 'Site Settings', 'siteName', [
     symbol('siteName', 'Site Name', true),
     assetLink('logo', 'Logo'),
@@ -181,8 +199,9 @@ async function run() {
     { label: 'Home', linkDestination: '/', displayOrder: 1 },
     { label: 'About', linkDestination: '/about', displayOrder: 2 },
     { label: 'Kanna', linkDestination: '/kanna', displayOrder: 3 },
-    { label: 'Experiences', linkDestination: '/experiences', displayOrder: 4 },
-    { label: 'Blog', linkDestination: '/blog', displayOrder: 5 },
+    { label: 'Shop', linkDestination: '/shop', displayOrder: 4 },
+    { label: 'Experiences', linkDestination: '/experiences', displayOrder: 5 },
+    { label: 'Blog', linkDestination: '/blog', displayOrder: 6 },
   ]
   for (const item of navItems) {
     await upsertEntry('navigation', `nav-${item.label.toLowerCase()}`, {
@@ -202,7 +221,7 @@ async function run() {
   console.log('Next steps:')
   console.log('  1. Run: npm run develop')
   console.log('  2. Visit http://localhost:8000 — should show text from Contentful')
-  console.log('  3. Check http://localhost:8000/__graphql to see all 6 content types\n')
+  console.log('  3. Check http://localhost:8000/__graphql to see all 7 content types\n')
 }
 
 run().catch(err => {

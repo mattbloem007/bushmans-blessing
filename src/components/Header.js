@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useStaticQuery, graphql } from 'gatsby'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+import { useCart } from '../context/CartContext'
 
 export default function Header({ heroPage = false }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const { itemCount, toggleCart } = useCart()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -72,28 +74,50 @@ export default function Header({ heroPage = false }) {
           ))}
         </nav>
 
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2 text-dust-grey-50"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-        >
-          <span
-            className={`block w-6 h-0.5 bg-current transition-all duration-200 ${
-              menuOpen ? 'rotate-45 translate-y-2' : ''
-            }`}
-          />
-          <span
-            className={`block w-6 h-0.5 bg-current transition-all duration-200 ${
-              menuOpen ? 'opacity-0' : ''
-            }`}
-          />
-          <span
-            className={`block w-6 h-0.5 bg-current transition-all duration-200 ${
-              menuOpen ? '-rotate-45 -translate-y-2' : ''
-            }`}
-          />
-        </button>
+        <div className="flex items-center gap-1">
+          {/* Cart */}
+          <button
+            onClick={toggleCart}
+            className="relative p-2 text-dust-grey-50 hover:text-rusty-spice-500 transition-colors"
+            aria-label={`Open cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M6 2l1.5 4h9L18 2" />
+              <path d="M3.5 8h17l-1.6 10.5a2 2 0 0 1-2 1.5H7.1a2 2 0 0 1-2-1.5L3.5 8z" />
+            </svg>
+            {itemCount > 0 && (
+              <span
+                className="absolute -top-0.5 -right-0.5 flex items-center justify-center w-4 h-4 rounded-full text-[10px] font-medium text-white"
+                style={{ background: 'var(--color-rusty-spice-500)' }}
+              >
+                {itemCount}
+              </span>
+            )}
+          </button>
+
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden flex flex-col gap-1.5 p-2 text-dust-grey-50"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          >
+            <span
+              className={`block w-6 h-0.5 bg-current transition-all duration-200 ${
+                menuOpen ? 'rotate-45 translate-y-2' : ''
+              }`}
+            />
+            <span
+              className={`block w-6 h-0.5 bg-current transition-all duration-200 ${
+                menuOpen ? 'opacity-0' : ''
+              }`}
+            />
+            <span
+              className={`block w-6 h-0.5 bg-current transition-all duration-200 ${
+                menuOpen ? '-rotate-45 -translate-y-2' : ''
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}

@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql, Link } from 'gatsby'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Layout from '../components/Layout'
+import Seo from '../components/Seo'
 import RichText from '../components/RichText'
 
 function toTagSlug(tag) {
@@ -133,18 +134,25 @@ export function Head({ data, location }) {
   const title = post?.seoTitle || post?.title || site.title
   const description = post?.seoDescription || site.description
   const canonical = `${site.siteUrl}${location.pathname}`
-  const ogImage = post?.featuredImage?.url || `${site.siteUrl}/og-image.svg`
+  const ogImage = post?.featuredImage?.url
+  const blogPostingLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post?.title,
+    description,
+    datePublished: post?.publishDate,
+    ...(ogImage && { image: ogImage }),
+    author: { '@type': 'Person', name: post?.authorName || site.title },
+  }
   return (
-    <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:type" content="article" />
-      <meta property="og:url" content={canonical} />
-      <link rel="canonical" href={canonical} />
-    </>
+    <Seo
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      ogType="article"
+      jsonLd={blogPostingLd}
+    />
   )
 }
 
