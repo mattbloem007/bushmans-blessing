@@ -3,7 +3,7 @@ import { graphql, Link } from 'gatsby'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
-import EyeSymbol from '../components/icons/EyeSymbol'
+import KannaSymbol from '../components/icons/KannaSymbol'
 import WavyDivider from '../components/WavyDivider'
 
 function formatPrice(cents) {
@@ -21,7 +21,7 @@ export default function ShopPage({ data }) {
         style={{ background: 'var(--color-black-950)' }}
       >
         <div className="max-w-3xl mx-auto pt-8">
-          <EyeSymbol size={48} color="#fe5101" className="mx-auto mb-8" />
+          <KannaSymbol size={48} color="#fe5101" className="mx-auto mb-8" />
           <p className="text-rusty-spice-500 text-xs uppercase tracking-[0.25em] mb-4 font-medium">
             Shop
           </p>

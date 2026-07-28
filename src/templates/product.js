@@ -4,7 +4,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import RichText from '../components/RichText'
-import EyeSymbol from '../components/icons/EyeSymbol'
+import KannaSymbol from '../components/icons/KannaSymbol'
 import WavyDivider from '../components/WavyDivider'
 import { useCart } from '../context/CartContext'
 
@@ -41,7 +41,7 @@ export default function ProductPage({ data }) {
           background: 'linear-gradient(160deg, var(--color-black-950) 0%, var(--color-black-900) 70%, color-mix(in srgb, var(--color-rusty-spice-600) 15%, var(--color-black-900)) 100%)',
         }}
       >
-        <EyeSymbol
+        <KannaSymbol
           size={360}
           color="#fe5101"
           className="absolute inset-0 m-auto opacity-5 pointer-events-none"

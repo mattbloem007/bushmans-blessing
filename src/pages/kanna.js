@@ -4,9 +4,10 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import RichText from '../components/RichText'
-import EyeSymbol from '../components/icons/EyeSymbol'
+import KannaSymbol from '../components/icons/KannaSymbol'
 import ElandSilhouette from '../components/icons/ElandSilhouette'
 import BushmanFigure from '../components/icons/BushmanFigure'
+import RunningSpottedFigure from '../components/icons/RunningSpottedFigure'
 import WavyDivider from '../components/WavyDivider'
 import EntopticDots from '../components/icons/EntopticDots'
 import { useInView } from '../hooks/useInView'
@@ -33,7 +34,7 @@ export default function KannaPage({ data }) {
           background: 'linear-gradient(160deg, var(--color-black-950) 0%, var(--color-black-900) 70%, color-mix(in srgb, var(--color-rusty-spice-600) 15%, var(--color-black-900)) 100%)',
         }}
       >
-        <EyeSymbol
+        <KannaSymbol
           size={400}
           color="#fe5101"
           className="absolute inset-0 m-auto opacity-5 pointer-events-none"
@@ -94,6 +95,7 @@ export default function KannaPage({ data }) {
             <div className="flex flex-col items-center lg:items-end gap-8">
               <ElandSilhouette size={240} color="#d0672f" className="opacity-30" />
               <BushmanFigure size={90} color="#d0672f" className="opacity-25 mr-8" />
+              <RunningSpottedFigure size={90} color="#d0672f" className="opacity-25 mr-8" />
             </div>
           </div>
         </div>
@@ -121,7 +123,7 @@ export default function KannaPage({ data }) {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="flex justify-center lg:justify-start order-2 lg:order-1">
-              <EyeSymbol size={180} color="#fe5101" className="opacity-60" />
+              <KannaSymbol size={180} color="#fe5101" className="opacity-60" />
             </div>
             <div className="order-1 lg:order-2">
               <p className="text-rusty-spice-500 text-xs uppercase tracking-[0.25em] mb-4 font-medium">

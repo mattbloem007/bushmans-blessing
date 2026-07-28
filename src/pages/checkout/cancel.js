@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import Layout from '../../components/Layout'
-import EyeSymbol from '../../components/icons/EyeSymbol'
+import KannaSymbol from '../../components/icons/KannaSymbol'
 
 export default function CheckoutCancelPage() {
   return (
@@ -11,7 +11,7 @@ export default function CheckoutCancelPage() {
         style={{ background: 'var(--color-black-950)' }}
       >
         <div className="max-w-xl mx-auto">
-          <EyeSymbol size={56} color="#fe5101" className="mx-auto mb-8" />
+          <KannaSymbol size={56} color="#fe5101" className="mx-auto mb-8" />
           <h1
             className="text-dust-grey-50 mb-4"
             style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 5vw, 3rem)' }}

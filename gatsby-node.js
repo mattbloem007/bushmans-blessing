@@ -9,7 +9,17 @@ exports.createSchemaCustomization = ({ actions }) => {
       logo: ContentfulAsset @link(from: "logo___NODE")
       socialMediaLinks: [String]
     }
+    type ContentfulPageExploreMoreText {
+      raw: String
+    }
     type ContentfulPage implements Node {
+      storyBlock1Heading: String
+      storyBlock1Image: ContentfulAsset @link(from: "storyBlock1Image___NODE")
+      storyBlock2Heading: String
+      storyBlock2Image: ContentfulAsset @link(from: "storyBlock2Image___NODE")
+      storyBlock3Heading: String
+      storyBlock3Image: ContentfulAsset @link(from: "storyBlock3Image___NODE")
+      exploreMoreText: ContentfulPageExploreMoreText
       seoTitle: String
       seoDescription: String
     }

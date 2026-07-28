@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useStaticQuery, graphql } from 'gatsby'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import { useCart } from '../context/CartContext'
+import KannaSymbol from './icons/KannaSymbol'
 
 export default function Header({ heroPage = false }) {
   const [scrolled, setScrolled] = useState(false)
@@ -47,6 +48,7 @@ export default function Header({ heroPage = false }) {
           className="flex items-center gap-3 text-dust-grey-50 no-underline"
           onClick={() => setMenuOpen(false)}
         >
+          <KannaSymbol size={28} color="#fe5101" />
           {logoImage ? (
             <GatsbyImage image={logoImage} alt={siteName} className="h-10 w-auto" />
           ) : (

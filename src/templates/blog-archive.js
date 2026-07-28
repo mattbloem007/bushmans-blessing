@@ -4,7 +4,7 @@ import { Document } from 'flexsearch'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import PostCard from '../components/PostCard'
-import EyeSymbol from '../components/icons/EyeSymbol'
+import KannaSymbol from '../components/icons/KannaSymbol'
 import WavyDivider from '../components/WavyDivider'
 import EntopticDots from '../components/icons/EntopticDots'
 
@@ -92,7 +92,7 @@ export default function BlogArchivePage({ data, pageContext }) {
           className="absolute bottom-0 right-0 opacity-[0.05] pointer-events-none"
         />
         <div className="relative max-w-3xl mx-auto pt-8">
-          <EyeSymbol size={48} color="#fe5101" className="mx-auto mb-8" />
+          <KannaSymbol size={48} color="#fe5101" className="mx-auto mb-8" />
           <p className="text-rusty-spice-500 text-xs uppercase tracking-[0.25em] mb-4 font-medium">
             Writing
           </p>

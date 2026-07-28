@@ -3,9 +3,10 @@ import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import RichText from '../components/RichText'
-import EyeSymbol from '../components/icons/EyeSymbol'
+import KannaSymbol from '../components/icons/KannaSymbol'
 import ElandSilhouette from '../components/icons/ElandSilhouette'
 import BushmanFigure from '../components/icons/BushmanFigure'
+import LeapingHornedFigure from '../components/icons/LeapingHornedFigure'
 import WavyDivider from '../components/WavyDivider'
 import { useInView } from '../hooks/useInView'
 
@@ -44,6 +45,11 @@ export default function AboutPage({ data }) {
           color="#fe5101"
           className="absolute left-36 bottom-20 opacity-[0.04] pointer-events-none"
           style={{ transform: 'scaleX(-1)' }}
+        />
+        <LeapingHornedFigure
+          size={200}
+          color="#fe5101"
+          className="absolute right-10 top-10 opacity-[0.05] pointer-events-none"
         />
 
         <div className="relative max-w-3xl mx-auto pt-28 pb-16">
@@ -103,7 +109,7 @@ export default function AboutPage({ data }) {
           ref={quoteRef}
           className={`max-w-4xl mx-auto text-center fade-up ${quoteInView ? 'in-view' : ''}`}
         >
-          <EyeSymbol size={56} color="#fe5101" className="mx-auto mb-10" />
+          <KannaSymbol size={56} color="#fe5101" className="mx-auto mb-10" />
           <blockquote
             style={{
               fontFamily: 'var(--font-heading)',

@@ -48,6 +48,10 @@ export default function Seo({ title, description, canonical, ogImage, ogType = '
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonical} />
       <link rel="canonical" href={canonical} />
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       {allLd.map((item, i) => (
         <script key={i} type="application/ld+json">
           {JSON.stringify(item)}

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
-import EyeSymbol from '../components/icons/EyeSymbol'
+import KannaSymbol from '../components/icons/KannaSymbol'
 import BushmanFigure from '../components/icons/BushmanFigure'
 import WavyDivider from '../components/WavyDivider'
 import EntopticDots from '../components/icons/EntopticDots'
@@ -74,7 +74,7 @@ function SubmissionForm() {
   if (submitted) {
     return (
       <div className="max-w-xl mx-auto text-center py-12">
-        <EyeSymbol size={56} color="#fe5101" className="mx-auto mb-6" />
+        <KannaSymbol size={56} color="#fe5101" className="mx-auto mb-6" />
         <h3
           className="text-dust-grey-50 mb-4"
           style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem' }}
@@ -215,7 +215,7 @@ export default function ExperiencesPage({ data }) {
         <div className="max-w-6xl mx-auto">
           {experiences.length === 0 ? (
             <div className="text-center py-16">
-              <EyeSymbol size={56} color="#d6cdc2" className="mx-auto mb-6" />
+              <KannaSymbol size={56} color="#d6cdc2" className="mx-auto mb-6" />
               <p className="text-dust-grey-600 text-lg" style={{ fontFamily: 'var(--font-heading)' }}>
                 Stories are on their way. Be the first to share yours.
               </p>
@@ -253,7 +253,7 @@ export default function ExperiencesPage({ data }) {
         </div>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <EyeSymbol size={48} color="#fe5101" className="mx-auto mb-6" />
+            <KannaSymbol size={48} color="#fe5101" className="mx-auto mb-6" />
             <h2
               className="text-dust-grey-50 mb-4"
               style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)' }}

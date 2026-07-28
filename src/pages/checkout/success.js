@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
-import EyeSymbol from '../../components/icons/EyeSymbol'
+import KannaSymbol from '../../components/icons/KannaSymbol'
 import { useCart } from '../../context/CartContext'
 
 function formatPrice(cents, currency = 'eur') {
@@ -41,7 +41,7 @@ export default function CheckoutSuccessPage({ location }) {
         style={{ background: 'var(--color-black-950)' }}
       >
         <div className="max-w-xl mx-auto text-center">
-          <EyeSymbol size={56} color="#fe5101" className="mx-auto mb-8" />
+          <KannaSymbol size={56} color="#fe5101" className="mx-auto mb-8" />
           {error ? (
             <p className="text-dust-grey-200">{error}</p>
           ) : !order ? (
