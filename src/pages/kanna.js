@@ -137,7 +137,7 @@ export default function KannaPage({ data }) {
                   lineHeight: '1.2',
                 }}
               >
-                How Kanna Speaks to the Cell
+                The Land and the Craft
               </h2>
               {page?.scienceSection && (
                 <RichText

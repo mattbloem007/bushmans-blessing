@@ -90,7 +90,7 @@ exports.handler = async event => {
     }
 
     // Digital-only carts skip shipping entirely. Physical/bundle carts get
-    // two named flat rates — the customer picks the one matching their
+    // three named flat rates — the customer picks the one matching their
     // country, since Stripe Checkout doesn't auto-restrict rate-by-country
     // without the paid Stripe Tax add-on.
     if (hasPhysicalItem) {
@@ -98,6 +98,13 @@ exports.handler = async event => {
         allowed_countries: [...EU_COUNTRIES, 'GB'],
       }
       sessionConfig.shipping_options = [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: 550, currency: 'eur' },
+            display_name: 'Netherlands Shipping — €5.50',
+          },
+        },
         {
           shipping_rate_data: {
             type: 'fixed_amount',

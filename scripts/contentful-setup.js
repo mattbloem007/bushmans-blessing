@@ -165,6 +165,12 @@ async function run() {
     assetLink('logo', 'Logo'),
     symbol('footerText', 'Footer Text'),
     symbolArray('socialMediaLinks', 'Social Media Links'),
+    symbol('legalBusinessName', 'Legal Business Name'),
+    text('businessAddress', 'Business Address'),
+    symbol('contactEmail', 'Contact Email'),
+    symbol('vatNumber', 'VAT Number'),
+    symbol('kvkNumber', 'KvK / Company Registration Number'),
+    symbol('countryOfOperation', 'Country of Operation'),
   ])
 
   console.log('\n── Creating sample entries ──────────────────────────────────────\n')
@@ -212,6 +218,7 @@ async function run() {
     { label: 'Shop', linkDestination: '/shop', displayOrder: 4 },
     { label: 'Experiences', linkDestination: '/experiences', displayOrder: 5 },
     { label: 'Blog', linkDestination: '/blog', displayOrder: 6 },
+    { label: 'Contact', linkDestination: '/contact', displayOrder: 7 },
   ]
   for (const item of navItems) {
     await upsertEntry('navigation', `nav-${item.label.toLowerCase()}`, {

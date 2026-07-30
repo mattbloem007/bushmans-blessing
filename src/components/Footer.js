@@ -38,6 +38,15 @@ export default function Footer() {
   const shopLinks = navItems.filter((item) => shopPaths.includes(item.linkDestination))
   const companyLinks = navItems.filter((item) => !shopPaths.includes(item.linkDestination))
 
+  // Legal pages are static/rarely change, so they're kept out of the CMS-driven
+  // Navigation list (which also feeds the header) to avoid cluttering the main nav.
+  const legalLinks = [
+    { label: 'Privacy Policy', linkDestination: '/privacy-policy' },
+    { label: 'Terms & Conditions', linkDestination: '/terms-and-conditions' },
+    { label: 'Refund & Return Policy', linkDestination: '/refund-policy' },
+    { label: 'Shipping Policy', linkDestination: '/shipping-policy' },
+  ]
+
   return (
     <footer className="bg-black-950 text-dust-grey-200">
       <div className="max-w-6xl mx-auto px-6 py-16">
@@ -85,6 +94,25 @@ export default function Footer() {
                 <h3 className="text-xs uppercase tracking-widest text-dust-grey-600 mb-4">Company</h3>
                 <ul className="space-y-2">
                   {companyLinks.map((item) => (
+                    <li key={item.linkDestination}>
+                      <Link
+                        to={item.linkDestination}
+                        className="text-sm text-dust-grey-200 hover:text-rusty-spice-500 transition-colors no-underline"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Legal */}
+            {legalLinks.length > 0 && (
+              <div>
+                <h3 className="text-xs uppercase tracking-widest text-dust-grey-600 mb-4">Legal</h3>
+                <ul className="space-y-2">
+                  {legalLinks.map((item) => (
                     <li key={item.linkDestination}>
                       <Link
                         to={item.linkDestination}

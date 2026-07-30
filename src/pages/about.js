@@ -119,7 +119,7 @@ export default function AboutPage({ data }) {
               color: 'var(--color-dust-grey-50)',
             }}
           >
-            "The oldest culture.<br />The oldest medicine."
+            "The oldest culture.<br />The oldest tradition."
           </blockquote>
           <p className="text-dust-grey-600 text-sm uppercase tracking-widest mt-8">
             San Bushmen · Southern Africa · 100,000+ years

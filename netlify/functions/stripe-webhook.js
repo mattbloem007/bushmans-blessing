@@ -2,6 +2,7 @@ const Stripe = require('stripe')
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const ORDER_EMAIL_FROM = process.env.ORDER_EMAIL_FROM || 'onboarding@resend.dev'
+const ORDER_NOTIFICATION_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL
 
 function formatMoney(amountInCents, currency) {
   return new Intl.NumberFormat('en-IE', { style: 'currency', currency: currency.toUpperCase() }).format(
@@ -89,6 +90,72 @@ async function sendOrderConfirmationEmail(session, lineItems) {
   }
 }
 
+function renderInternalNotificationHtml(session, lineItems) {
+  const currency = session.currency
+  const address = session.shipping_details?.address || session.customer_details?.address
+  const addressLines = address
+    ? [address.line1, address.line2, `${address.postal_code || ''} ${address.city || ''}`.trim(), address.country]
+        .filter(Boolean)
+        .join(', ')
+    : 'No shipping address on file'
+
+  const itemRows = lineItems
+    .map(
+      li => `
+        <tr>
+          <td style="padding:6px 8px;border-bottom:1px solid #ddd;">${li.description}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #ddd;text-align:center;">${li.quantity}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #ddd;text-align:right;">${formatMoney(li.amount_total, currency)}</td>
+        </tr>`
+    )
+    .join('')
+
+  return `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
+      <h1 style="font-size:18px;">New order — ${formatMoney(session.amount_total, currency)}</h1>
+      <p><strong>Order reference:</strong> ${session.id}</p>
+      <p><strong>Customer:</strong> ${session.customer_details?.name || '(no name)'} — ${session.customer_details?.email || '(no email)'}</p>
+      <p><strong>Ship to:</strong> ${addressLines}</p>
+      <table style="width:100%;border-collapse:collapse;margin:12px 0;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:6px 8px;border-bottom:2px solid #333;">Item</th>
+            <th style="text-align:center;padding:6px 8px;border-bottom:2px solid #333;">Qty</th>
+            <th style="text-align:right;padding:6px 8px;border-bottom:2px solid #333;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>${itemRows}</tbody>
+      </table>
+      <p>Use the <a href="https://dashboard.stripe.com/payments">Stripe dashboard</a> to look up full payment details.</p>
+    </div>
+  `
+}
+
+async function sendInternalOrderNotification(session, lineItems) {
+  if (!RESEND_API_KEY || !ORDER_NOTIFICATION_EMAIL) {
+    console.warn('RESEND_API_KEY or ORDER_NOTIFICATION_EMAIL not set — skipping internal order notification')
+    return
+  }
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: `Bushman's Blessing Orders <${ORDER_EMAIL_FROM}>`,
+      to: ORDER_NOTIFICATION_EMAIL,
+      subject: `New order — ${session.customer_details?.name || session.customer_details?.email || session.id}`,
+      html: renderInternalNotificationHtml(session, lineItems),
+    }),
+  })
+
+  if (!res.ok) {
+    console.error('Failed to send internal order notification:', res.status, await res.text())
+  }
+}
+
 // Verifies and acknowledges Stripe events so Stripe doesn't retry, and
 // sends the customer their order confirmation email on completed checkouts.
 exports.handler = async event => {
@@ -124,7 +191,9 @@ exports.handler = async event => {
         amountTotal: session.amount_total,
         customerEmail: session.customer_details?.email,
       })
-      await sendOrderConfirmationEmail(session, session.line_items?.data || [])
+      const lineItems = session.line_items?.data || []
+      await sendOrderConfirmationEmail(session, lineItems)
+      await sendInternalOrderNotification(session, lineItems)
     } catch (err) {
       console.error('Failed to process checkout.session.completed:', err.message)
     }
