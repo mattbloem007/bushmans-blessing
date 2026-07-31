@@ -103,6 +103,10 @@ function FeaturedProduct({ product }) {
               View Details
             </Link>
           </div>
+          <p className="text-dust-grey-500 text-xs mt-4 leading-relaxed">
+            Botanical preparation, not evaluated for medical use. Not intended to diagnose, treat,
+            cure, or prevent any disease.
+          </p>
         </div>
       </div>
     </section>
@@ -314,6 +318,10 @@ export default function HomePage({ data }) {
               >
                 Share Your Story
               </Link>
+              <p className="text-dust-grey-500 text-xs mt-6 max-w-md mx-auto leading-relaxed">
+                Individual experiences shared by our community. Results vary and are not evidence of
+                medical effect.
+              </p>
             </div>
           </div>
         </section>

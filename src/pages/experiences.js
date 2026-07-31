@@ -233,6 +233,10 @@ export default function ExperiencesPage({ data }) {
               ))}
             </div>
           )}
+          <p className="text-dust-grey-500 text-xs mt-10 max-w-md mx-auto text-center leading-relaxed">
+            Individual experiences shared by our community. Results vary and are not evidence of
+            medical effect.
+          </p>
         </div>
       </section>
 
@@ -261,7 +265,7 @@ export default function ExperiencesPage({ data }) {
               Add Your Voice to the Circle
             </h2>
             <p className="text-dust-grey-200 max-w-md mx-auto leading-relaxed">
-              Kanna has always been a medicine passed between people — shared freely, spoken about openly, held in community. If it has touched you in some way, your words belong here.
+              Kanna has always been shared between people — passed freely, spoken about openly, held in community. If it has touched you in some way, your words belong here.
             </p>
           </div>
           <SubmissionForm />

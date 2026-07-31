@@ -149,7 +149,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="pt-8 text-xs text-dust-grey-600 text-center">{footerText}</p>
+        <p className="pt-8 text-xs text-dust-grey-600 text-center max-w-xl mx-auto leading-relaxed">
+          Our products are botanical preparations, not evaluated for medical use, and are not
+          intended to diagnose, treat, cure, or prevent any disease.
+        </p>
+        <p className="pt-4 text-xs text-dust-grey-600 text-center">{footerText}</p>
       </div>
     </footer>
   )

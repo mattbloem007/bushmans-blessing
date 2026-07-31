@@ -12,13 +12,6 @@ function formatMoney(amountInCents, currency) {
 
 function renderOrderEmailHtml(session, lineItems) {
   const currency = session.currency
-  const address = session.shipping_details?.address || session.customer_details?.address
-  const addressLines = address
-    ? [address.line1, address.line2, `${address.postal_code || ''} ${address.city || ''}`.trim(), address.country]
-        .filter(Boolean)
-        .map(line => `<div>${line}</div>`)
-        .join('')
-    : ''
 
   const itemRows = lineItems
     .map(
@@ -39,6 +32,7 @@ function renderOrderEmailHtml(session, lineItems) {
     <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2b2620;">
       <h1 style="font-size:20px;">Thank you for your order</h1>
       <p>Hi${session.customer_details?.name ? ` ${session.customer_details.name}` : ''}, your order from Bushman's Blessing is confirmed.</p>
+      <p>We'll begin preparing it for dispatch, and we'll email you again — with your tracking details — as soon as it's on its way.</p>
       <table style="width:100%;border-collapse:collapse;margin:16px 0;">
         <thead>
           <tr>
@@ -56,7 +50,6 @@ function renderOrderEmailHtml(session, lineItems) {
           </tr>
         </tbody>
       </table>
-      ${address ? `<p><strong>Shipping to:</strong><br/>${addressLines}</p>` : ''}
       <p>Order reference: ${session.id}</p>
       <p>Questions about your order? Just reply to this email.</p>
     </div>

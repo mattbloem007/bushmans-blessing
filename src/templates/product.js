@@ -115,6 +115,11 @@ export default function ProductPage({ data }) {
               </div>
             )}
 
+            <p className="text-dust-grey-400 text-xs mt-4 leading-relaxed">
+              Botanical preparation, not evaluated for medical use. Not intended to diagnose, treat,
+              cure, or prevent any disease.
+            </p>
+
             <div className="mt-10 opacity-20">
               <WavyDivider color="var(--color-dust-grey-200)" />
             </div>
