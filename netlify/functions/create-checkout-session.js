@@ -4,6 +4,13 @@ const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
 const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN
 const CONTENTFUL_ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || 'master'
 const SITE_URL = process.env.URL || process.env.DEPLOY_URL || 'http://localhost:8888'
+const MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID = process.env.MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID
+
+// Per-unit amount (cents, EUR) transferred to the Mantis Collective connected
+// account on each sale, keyed by product slug.
+const COMMUNITY_GIVEBACK_CENTS_BY_SLUG = {
+  'kanna-tincture': 350,
+}
 
 // EU + UK — the two shipping zones the business currently ships to.
 const EU_COUNTRIES = [
@@ -57,6 +64,7 @@ exports.handler = async event => {
   try {
     const lineItems = []
     let hasPhysicalItem = false
+    let givebackCents = 0
 
     for (const { slug, quantity } of items) {
       const qty = Number(quantity)
@@ -78,6 +86,8 @@ exports.handler = async event => {
       if (product.productType === 'physical' || product.productType === 'bundle') {
         hasPhysicalItem = true
       }
+
+      givebackCents += (COMMUNITY_GIVEBACK_CENTS_BY_SLUG[slug] || 0) * qty
 
       lineItems.push({ price: product.stripePriceId, quantity: qty })
     }
@@ -120,6 +130,24 @@ exports.handler = async event => {
           },
         },
       ]
+    }
+
+    // Automatically routes the Mantis Collective's per-unit share straight to
+    // their connected Stripe account as part of the same payment — Stripe
+    // includes it in their next scheduled payout, no manual transfer needed.
+    if (givebackCents > 0) {
+      if (MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID) {
+        sessionConfig.payment_intent_data = {
+          transfer_data: {
+            destination: MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID,
+            amount: givebackCents,
+          },
+        }
+      } else {
+        console.warn(
+          'Cart includes a community-giveback item but MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID is not set — skipping transfer'
+        )
+      }
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig)
