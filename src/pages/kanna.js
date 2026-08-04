@@ -82,7 +82,7 @@ export default function KannaPage({ data }) {
                   lineHeight: '1.2',
                 }}
               >
-                The Ancestral Medicine
+                The Ancestral Tradition
               </h2>
               {page?.traditionalUse && (
                 <RichText content={page.traditionalUse} className="text-base md:text-lg" />

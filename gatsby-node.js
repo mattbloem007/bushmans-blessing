@@ -137,6 +137,15 @@ exports.createPages = async ({ graphql, actions }) => {
   })
 }
 
+// /experiences is hidden until the site is approved by Stripe — flip
+// GATSBY_SHOW_EXPERIENCES=true (in Netlify env vars) to bring it back.
+exports.onCreatePage = async ({ page, actions }) => {
+  const { deletePage } = actions
+  if (page.path.startsWith('/experiences') && process.env.GATSBY_SHOW_EXPERIENCES !== 'true') {
+    deletePage(page)
+  }
+}
+
 // Full-text blog search index, fetched client-side by blog-archive.js and
 // indexed with FlexSearch — keeps post body text out of the page's GraphQL
 // data blob (see milestone 4 log for why body text was originally excluded).

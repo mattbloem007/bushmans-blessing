@@ -32,7 +32,10 @@ export default function Footer() {
   `)
 
   const { siteName, footerText, socialMediaLinks } = data.contentfulSiteSettings
-  const navItems = data.allContentfulNavigation.nodes
+  // /experiences is hidden until the site is approved by Stripe — see gatsby-node.js
+  const navItems = data.allContentfulNavigation.nodes.filter(
+    (item) => process.env.GATSBY_SHOW_EXPERIENCES === 'true' || item.linkDestination !== '/experiences'
+  )
 
   const shopPaths = ['/', '/shop', '/kanna']
   const shopLinks = navItems.filter((item) => shopPaths.includes(item.linkDestination))

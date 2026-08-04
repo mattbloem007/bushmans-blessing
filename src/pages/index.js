@@ -11,6 +11,9 @@ import WavyDivider from '../components/WavyDivider'
 import { useInView } from '../hooks/useInView'
 import { useCart } from '../context/CartContext'
 
+// /experiences is hidden until the site is approved by Stripe — see gatsby-node.js
+const SHOW_EXPERIENCES = process.env.GATSBY_SHOW_EXPERIENCES === 'true'
+
 function formatPrice(cents) {
   return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(cents / 100)
 }
@@ -225,12 +228,14 @@ export default function HomePage({ data }) {
             >
               Shop Kanna
             </Link>
-            <Link
-              to="/experiences"
-              className="inline-block border border-dust-grey-200/40 hover:border-rusty-spice-500 text-dust-grey-200 hover:text-rusty-spice-500 font-medium px-8 py-4 rounded transition-colors no-underline text-sm uppercase tracking-widest"
-            >
-              Read Stories
-            </Link>
+            {SHOW_EXPERIENCES && (
+              <Link
+                to="/experiences"
+                className="inline-block border border-dust-grey-200/40 hover:border-rusty-spice-500 text-dust-grey-200 hover:text-rusty-spice-500 font-medium px-8 py-4 rounded transition-colors no-underline text-sm uppercase tracking-widest"
+              >
+                Read Stories
+              </Link>
+            )}
           </div>
         </div>
 
@@ -269,7 +274,7 @@ export default function HomePage({ data }) {
       )}
 
       {/* ── Featured Experiences ──────────────────────────────────────────── */}
-      {experiences.length > 0 && (
+      {SHOW_EXPERIENCES && experiences.length > 0 && (
         <section
           className="grain py-24 md:py-32 px-6 relative overflow-hidden"
           style={{ background: 'var(--color-black-900)' }}

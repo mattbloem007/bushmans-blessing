@@ -28,7 +28,10 @@ export default function Header({ heroPage = false }) {
   `)
 
   const { siteName, logo } = data.contentfulSiteSettings
-  const navItems = data.allContentfulNavigation.nodes
+  // /experiences is hidden until the site is approved by Stripe — see gatsby-node.js
+  const navItems = data.allContentfulNavigation.nodes.filter(
+    (item) => process.env.GATSBY_SHOW_EXPERIENCES === 'true' || item.linkDestination !== '/experiences'
+  )
   const logoImage = logo ? getImage(logo) : null
 
   const solidBg = !heroPage || scrolled
