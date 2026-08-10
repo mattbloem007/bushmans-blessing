@@ -5,10 +5,15 @@ function formatPrice(cents) {
   return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(cents / 100)
 }
 
+const FREE_SHIPPING_THRESHOLD = 2
+
 export default function CartDrawer() {
   const { items, itemCount, subtotalInCents, isOpen, closeCart, updateQuantity, removeItem } = useCart()
   const [checkingOut, setCheckingOut] = useState(false)
   const [error, setError] = useState(null)
+
+  const kannaQty = items.find(i => i.slug === 'kanna-tincture')?.quantity || 0
+  const qualifiesForFreeShipping = kannaQty >= FREE_SHIPPING_THRESHOLD
 
   const handleCheckout = async () => {
     setError(null)
@@ -126,9 +131,17 @@ export default function CartDrawer() {
             >
               {checkingOut ? 'Redirecting…' : 'Checkout'}
             </button>
-            <p className="text-dust-grey-600 text-xs text-center mt-3">
-              Shipping calculated at checkout.
-            </p>
+            {kannaQty > 0 ? (
+              <p className="text-xs text-center mt-3 text-rusty-spice-500">
+                {qualifiesForFreeShipping
+                  ? 'Free shipping unlocked ✓'
+                  : `Add ${FREE_SHIPPING_THRESHOLD - kannaQty} more Kanna Tincture for free shipping`}
+              </p>
+            ) : (
+              <p className="text-dust-grey-600 text-xs text-center mt-3">
+                Shipping calculated at checkout.
+              </p>
+            )}
           </div>
         )}
       </aside>

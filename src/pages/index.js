@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { graphql, Link } from 'gatsby'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Layout from '../components/Layout'
@@ -9,7 +9,7 @@ import BushmanFigure from '../components/icons/BushmanFigure'
 import RunningSpottedFigure from '../components/icons/RunningSpottedFigure'
 import WavyDivider from '../components/WavyDivider'
 import { useInView } from '../hooks/useInView'
-import { useCart } from '../context/CartContext'
+import BuyNowButton from '../components/BuyNowButton'
 
 // /experiences is hidden until the site is approved by Stripe — see gatsby-node.js
 const SHOW_EXPERIENCES = process.env.GATSBY_SHOW_EXPERIENCES === 'true'
@@ -41,24 +41,8 @@ function FeaturedQuote({ authorName, location, story, delay = '' }) {
 
 function FeaturedProduct({ product }) {
   const image = getImage(product.productImage)
-  const [added, setAdded] = useState(false)
-  const { addItem, openCart } = useCart()
   const ref = useRef(null)
   const inView = useInView(ref)
-
-  const handleAddToCart = () => {
-    addItem({
-      productId: product.slug,
-      slug: product.slug,
-      name: product.name,
-      image: product.productImage?.url || null,
-      unitPriceInCents: product.priceInCents,
-      quantity: 1,
-      productType: product.productType || 'physical',
-    })
-    setAdded(true)
-    openCart()
-  }
 
   return (
     <section className="py-20 md:py-28 px-6 bg-dust-grey-50">
@@ -92,13 +76,13 @@ function FeaturedProduct({ product }) {
             <RichText content={product.description} className="mb-8" />
           )}
           <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={handleAddToCart}
+            <BuyNowButton
+              slug={product.slug}
               disabled={product.inStock === false}
               className="bg-rusty-spice-500 hover:bg-rusty-spice-600 disabled:opacity-50 text-white font-medium px-8 py-4 rounded transition-colors uppercase tracking-widest text-sm"
             >
-              {product.inStock === false ? 'Out of Stock' : added ? 'Added ✓' : 'Add to Cart'}
-            </button>
+              {product.inStock === false ? 'Out of Stock' : 'Buy Now'}
+            </BuyNowButton>
             <Link
               to={`/shop/${product.slug}`}
               className="inline-flex items-center justify-center border border-dust-grey-950/20 hover:border-rusty-spice-500 text-dust-grey-950 hover:text-rusty-spice-500 font-medium px-8 py-4 rounded transition-colors no-underline text-sm uppercase tracking-widest"

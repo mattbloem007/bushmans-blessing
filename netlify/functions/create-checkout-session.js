@@ -12,6 +12,12 @@ const COMMUNITY_GIVEBACK_CENTS_BY_SLUG = {
   'kanna-tincture': 350,
 }
 
+// Orders qualify for free shipping once the cart holds at least this many
+// units of the given product slug.
+const FREE_SHIPPING_THRESHOLD_BY_SLUG = {
+  'kanna-tincture': 2,
+}
+
 // EU + UK — the two shipping zones the business currently ships to.
 const EU_COUNTRIES = [
   'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR',
@@ -65,6 +71,7 @@ exports.handler = async event => {
     const lineItems = []
     let hasPhysicalItem = false
     let givebackCents = 0
+    const quantityBySlug = {}
 
     for (const { slug, quantity } of items) {
       const qty = Number(quantity)
@@ -88,9 +95,14 @@ exports.handler = async event => {
       }
 
       givebackCents += (COMMUNITY_GIVEBACK_CENTS_BY_SLUG[slug] || 0) * qty
+      quantityBySlug[slug] = (quantityBySlug[slug] || 0) + qty
 
       lineItems.push({ price: product.stripePriceId, quantity: qty })
     }
+
+    const qualifiesForFreeShipping = Object.entries(FREE_SHIPPING_THRESHOLD_BY_SLUG).some(
+      ([slug, threshold]) => (quantityBySlug[slug] || 0) >= threshold
+    )
 
     const sessionConfig = {
       mode: 'payment',
@@ -107,29 +119,27 @@ exports.handler = async event => {
       sessionConfig.shipping_address_collection = {
         allowed_countries: [...EU_COUNTRIES, 'GB'],
       }
-      sessionConfig.shipping_options = [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 550, currency: 'eur' },
-            display_name: 'Netherlands Shipping — €5.50',
-          },
+      const shippingRates = qualifiesForFreeShipping
+        ? [
+            { name: 'Netherlands', amount: 0 },
+            { name: 'EU', amount: 0 },
+            { name: 'UK', amount: 0 },
+          ]
+        : [
+            { name: 'Netherlands', amount: 550 },
+            { name: 'EU', amount: 850 },
+            { name: 'UK', amount: 1400 },
+          ]
+      sessionConfig.shipping_options = shippingRates.map(({ name, amount }) => ({
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount, currency: 'eur' },
+          display_name:
+            amount === 0
+              ? `${name} Shipping — Free`
+              : `${name} Shipping — €${(amount / 100).toFixed(2)}`,
         },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 850, currency: 'eur' },
-            display_name: 'EU Shipping — €8.50',
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 1400, currency: 'eur' },
-            display_name: 'UK Shipping — €14.00',
-          },
-        },
-      ]
+      }))
     }
 
     // Automatically routes the Mantis Collective's per-unit share straight to

@@ -50,6 +50,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       stripePriceId: String
       description: ContentfulProductDescription
       productImage: ContentfulAsset @link(from: "productImage___NODE")
+      galleryImages: [ContentfulAsset] @link(from: "galleryImages___NODE")
       bundleItems: [ContentfulProduct] @link(from: "bundleItems___NODE")
       seoTitle: String
       seoDescription: String

@@ -9,15 +9,24 @@ import BushmanFigure from '../components/icons/BushmanFigure'
 import LeapingHornedFigure from '../components/icons/LeapingHornedFigure'
 import WavyDivider from '../components/WavyDivider'
 import { useInView } from '../hooks/useInView'
+import BuyNowButton from '../components/BuyNowButton'
+
+function formatPrice(cents) {
+  return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(cents / 100)
+}
 
 export default function AboutPage({ data }) {
   const page = data.contentfulPage
+  const product = data.allContentfulProduct.nodes[0]
 
   const storyRef = useRef(null)
   const storyInView = useInView(storyRef)
 
   const quoteRef = useRef(null)
   const quoteInView = useInView(quoteRef)
+
+  const buyRef = useRef(null)
+  const buyInView = useInView(buyRef)
 
   return (
     <Layout heroPage>
@@ -126,6 +135,34 @@ export default function AboutPage({ data }) {
           </p>
         </div>
       </section>
+
+      {/* ── Buy Now CTA ──────────────────────────────────────────────────── */}
+      {product && (
+        <section className="py-20 md:py-28 px-6 bg-dust-grey-50 text-center">
+          <div
+            ref={buyRef}
+            className={`max-w-xl mx-auto fade-up ${buyInView ? 'in-view' : ''}`}
+          >
+            <KannaSymbol size={40} color="#d0672f" className="mx-auto mb-6" />
+            <h2
+              className="text-dust-grey-950 mb-4"
+              style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}
+            >
+              Experience {product.name}
+            </h2>
+            <p className="text-dust-grey-600 text-xl mb-8" style={{ fontFamily: 'var(--font-heading)' }}>
+              {formatPrice(product.priceInCents)}
+            </p>
+            <BuyNowButton
+              slug={product.slug}
+              disabled={product.inStock === false}
+              className="bg-rusty-spice-500 hover:bg-rusty-spice-600 disabled:opacity-50 text-white font-medium px-8 py-4 rounded transition-colors uppercase tracking-widest text-sm"
+            >
+              {product.inStock === false ? 'Out of Stock' : 'Buy Now'}
+            </BuyNowButton>
+          </div>
+        </section>
+      )}
     </Layout>
   )
 }
@@ -152,6 +189,14 @@ export const query = graphql`
       }
       seoTitle
       seoDescription
+    }
+    allContentfulProduct(limit: 1, filter: { inStock: { eq: true } }) {
+      nodes {
+        name
+        slug
+        priceInCents
+        inStock
+      }
     }
   }
 `

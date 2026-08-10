@@ -7,6 +7,7 @@ import RichText from '../components/RichText'
 import KannaSymbol from '../components/icons/KannaSymbol'
 import WavyDivider from '../components/WavyDivider'
 import { useCart } from '../context/CartContext'
+import BuyNowButton from '../components/BuyNowButton'
 
 function formatPrice(cents) {
   return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(cents / 100)
@@ -14,7 +15,9 @@ function formatPrice(cents) {
 
 export default function ProductPage({ data }) {
   const product = data.contentfulProduct
-  const image = getImage(product.productImage)
+  const gallery = product.galleryImages?.length ? product.galleryImages : [product.productImage].filter(Boolean)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const selectedImage = getImage(gallery[selectedIndex] || product.productImage)
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
   const { addItem, openCart } = useCart()
@@ -47,13 +50,37 @@ export default function ProductPage({ data }) {
           className="absolute inset-0 m-auto opacity-5 pointer-events-none"
         />
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {image && (
-            <GatsbyImage
-              image={image}
-              alt={product.productImage?.title || product.name}
-              className="rounded-md"
-            />
-          )}
+          <div>
+            {selectedImage && (
+              <GatsbyImage
+                image={selectedImage}
+                alt={gallery[selectedIndex]?.title || product.name}
+                className="rounded-md"
+              />
+            )}
+            {gallery.length > 1 && (
+              <div className="flex gap-3 mt-4">
+                {gallery.map((img, i) => {
+                  const thumb = getImage(img)
+                  if (!thumb) return null
+                  return (
+                    <button
+                      key={img.url || i}
+                      onClick={() => setSelectedIndex(i)}
+                      aria-label={`Show image ${i + 1}`}
+                      aria-current={i === selectedIndex}
+                      className="w-16 h-16 rounded overflow-hidden border-2 transition-colors"
+                      style={{
+                        borderColor: i === selectedIndex ? 'var(--color-rusty-spice-500)' : 'transparent',
+                      }}
+                    >
+                      <GatsbyImage image={thumb} alt={img.title || `${product.name} thumbnail ${i + 1}`} />
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
           <div>
             <p className="text-rusty-spice-500 text-xs uppercase tracking-[0.25em] mb-4 font-medium">
               {product.productType === 'digital' ? 'Digital' : 'Shop'}
@@ -106,6 +133,12 @@ export default function ProductPage({ data }) {
                     +
                   </button>
                 </div>
+                <BuyNowButton
+                  slug={product.slug}
+                  quantity={quantity}
+                  wrapperClassName="flex-1 inline-flex flex-col"
+                  className="w-full border border-white/40 hover:border-rusty-spice-500 text-dust-grey-50 hover:text-rusty-spice-500 font-medium py-4 rounded transition-colors uppercase tracking-widest text-sm"
+                />
                 <button
                   onClick={handleAddToCart}
                   className="flex-1 bg-rusty-spice-500 hover:bg-rusty-spice-600 text-white font-medium py-4 rounded transition-colors uppercase tracking-widest text-sm"
@@ -115,7 +148,13 @@ export default function ProductPage({ data }) {
               </div>
             )}
 
-            <p className="text-dust-grey-400 text-xs mt-4 leading-relaxed italic">
+            {product.productType !== 'digital' && (
+              <p className="text-rusty-spice-500 text-xs mt-3 uppercase tracking-widest">
+                Buy 2 or more, shipping's free
+              </p>
+            )}
+
+            <p className="text-dust-grey-200 text-xs mt-4 leading-relaxed italic">
               * Botanical preparation, not evaluated for medical use. Not intended to diagnose, treat,
               cure, or prevent any disease.
             </p>
@@ -176,6 +215,11 @@ export const query = graphql`
       inStock
       description { raw }
       productImage {
+        gatsbyImageData(width: 800, placeholder: BLURRED)
+        url
+        title
+      }
+      galleryImages {
         gatsbyImageData(width: 800, placeholder: BLURRED)
         url
         title
