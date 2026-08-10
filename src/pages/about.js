@@ -83,7 +83,7 @@ export default function AboutPage({ data }) {
       </section>
 
       {/* ── Story body ───────────────────────────────────────────────────── */}
-      <section className="py-24 md:py-32 bg-dust-grey-50 px-6">
+      <section className="pt-24 md:pt-32 pb-6 md:pb-8 bg-dust-grey-50 px-6">
         <div
           ref={storyRef}
           className={`max-w-3xl mx-auto fade-up ${storyInView ? 'in-view' : ''}`}
@@ -101,6 +101,34 @@ export default function AboutPage({ data }) {
           </div>
         </div>
       </section>
+
+      {/* ── Buy Now CTA ──────────────────────────────────────────────────── */}
+      {product && (
+        <section className="pb-20 md:pb-28 px-6 bg-dust-grey-50 text-center">
+          <div
+            ref={buyRef}
+            className={`max-w-xl mx-auto fade-up ${buyInView ? 'in-view' : ''}`}
+          >
+            <KannaSymbol size={40} color="#d0672f" className="mx-auto mb-6" />
+            <h2
+              className="text-dust-grey-950 mb-4"
+              style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}
+            >
+              Experience {product.name}
+            </h2>
+            <p className="text-dust-grey-600 text-xl mb-8" style={{ fontFamily: 'var(--font-heading)' }}>
+              {formatPrice(product.priceInCents)}
+            </p>
+            <BuyNowButton
+              slug={product.slug}
+              disabled={product.inStock === false}
+              className="bg-rusty-spice-500 hover:bg-rusty-spice-600 disabled:opacity-50 text-white font-medium px-8 py-4 rounded transition-colors uppercase tracking-widest text-sm"
+            >
+              {product.inStock === false ? 'Out of Stock' : 'Buy Now'}
+            </BuyNowButton>
+          </div>
+        </section>
+      )}
 
       {/* ── Pull quote ───────────────────────────────────────────────────── */}
       <section
@@ -135,34 +163,6 @@ export default function AboutPage({ data }) {
           </p>
         </div>
       </section>
-
-      {/* ── Buy Now CTA ──────────────────────────────────────────────────── */}
-      {product && (
-        <section className="py-20 md:py-28 px-6 bg-dust-grey-50 text-center">
-          <div
-            ref={buyRef}
-            className={`max-w-xl mx-auto fade-up ${buyInView ? 'in-view' : ''}`}
-          >
-            <KannaSymbol size={40} color="#d0672f" className="mx-auto mb-6" />
-            <h2
-              className="text-dust-grey-950 mb-4"
-              style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}
-            >
-              Experience {product.name}
-            </h2>
-            <p className="text-dust-grey-600 text-xl mb-8" style={{ fontFamily: 'var(--font-heading)' }}>
-              {formatPrice(product.priceInCents)}
-            </p>
-            <BuyNowButton
-              slug={product.slug}
-              disabled={product.inStock === false}
-              className="bg-rusty-spice-500 hover:bg-rusty-spice-600 disabled:opacity-50 text-white font-medium px-8 py-4 rounded transition-colors uppercase tracking-widest text-sm"
-            >
-              {product.inStock === false ? 'Out of Stock' : 'Buy Now'}
-            </BuyNowButton>
-          </div>
-        </section>
-      )}
     </Layout>
   )
 }

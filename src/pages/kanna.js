@@ -160,7 +160,7 @@ export default function KannaPage({ data }) {
       </section>
 
       {/* ── Spiritual Section ─────────────────────────────────────────────── */}
-      <section className="py-24 md:py-32 px-6 bg-dust-grey-50">
+      <section className="pt-24 md:pt-32 px-6 bg-dust-grey-50">
         <div
           ref={spiritRef}
           className={`max-w-3xl mx-auto text-center fade-up ${spiritInView ? 'in-view' : ''}`}
@@ -216,7 +216,7 @@ export default function KannaPage({ data }) {
 
       {/* ── Buy Now CTA ──────────────────────────────────────────────────── */}
       {product && (
-        <section className="py-20 md:py-28 px-6 bg-dust-grey-50 text-center">
+        <section className="pb-20 md:pb-28 px-6 bg-dust-grey-50 text-center">
           <div
             ref={buyRef}
             className={`max-w-xl mx-auto fade-up ${buyInView ? 'in-view' : ''}`}
