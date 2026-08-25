@@ -5,6 +5,7 @@ import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import KannaSymbol from '../components/icons/KannaSymbol'
 import WavyDivider from '../components/WavyDivider'
+import BuyNowButton from '../components/BuyNowButton'
 
 function formatPrice(cents) {
   return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(cents / 100)
@@ -55,32 +56,42 @@ export default function ShopPage({ data }) {
               {products.map(product => {
                 const image = getImage(product.productImage)
                 return (
-                  <Link key={product.slug} to={`/shop/${product.slug}`} className="group no-underline">
-                    <div className="aspect-square overflow-hidden rounded-sm mb-5">
-                      {image ? (
-                        <GatsbyImage
-                          image={image}
-                          alt={product.name}
-                          className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
-                        />
-                      ) : (
-                        <div
-                          className="w-full h-full"
-                          style={{
-                            background:
-                              'linear-gradient(135deg, var(--color-black-950) 0%, var(--color-black-900) 55%, color-mix(in srgb, var(--color-rusty-spice-600) 30%, var(--color-black-900)) 100%)',
-                          }}
-                        />
-                      )}
-                    </div>
-                    <h2
-                      className="text-dust-grey-950 group-hover:text-rusty-spice-500 transition-colors mb-2"
-                      style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', fontWeight: 600 }}
+                  <div key={product.slug} className="group">
+                    <Link to={`/shop/${product.slug}`} className="no-underline block">
+                      <div className="aspect-square overflow-hidden rounded-sm mb-5">
+                        {image ? (
+                          <GatsbyImage
+                            image={image}
+                            alt={product.name}
+                            className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                        ) : (
+                          <div
+                            className="w-full h-full"
+                            style={{
+                              background:
+                                'linear-gradient(135deg, var(--color-black-950) 0%, var(--color-black-900) 55%, color-mix(in srgb, var(--color-rusty-spice-600) 30%, var(--color-black-900)) 100%)',
+                            }}
+                          />
+                        )}
+                      </div>
+                      <h2
+                        className="text-dust-grey-950 group-hover:text-rusty-spice-500 transition-colors mb-2"
+                        style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', fontWeight: 600 }}
+                      >
+                        {product.name}
+                      </h2>
+                      <p className="text-dust-grey-600 text-sm mb-4">{formatPrice(product.priceInCents)}</p>
+                    </Link>
+                    <BuyNowButton
+                      slug={product.slug}
+                      disabled={product.inStock === false}
+                      wrapperClassName="inline-flex flex-col w-full"
+                      className="w-full bg-rusty-spice-500 hover:bg-rusty-spice-600 disabled:opacity-50 text-white font-medium py-3 rounded transition-colors uppercase tracking-widest text-xs"
                     >
-                      {product.name}
-                    </h2>
-                    <p className="text-dust-grey-600 text-sm">{formatPrice(product.priceInCents)}</p>
-                  </Link>
+                      {product.inStock === false ? 'Out of Stock' : 'Buy Now'}
+                    </BuyNowButton>
+                  </div>
                 )
               })}
             </div>
@@ -109,6 +120,7 @@ export const query = graphql`
         name
         slug
         priceInCents
+        inStock
         productImage {
           gatsbyImageData(width: 600, placeholder: BLURRED)
         }

@@ -1,8 +1,10 @@
 const Stripe = require('stripe')
+const { getOrCreateOrderNumber } = require('./lib/orderNumber')
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const ORDER_EMAIL_FROM = process.env.ORDER_EMAIL_FROM || 'onboarding@resend.dev'
 const ORDER_NOTIFICATION_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL
+const SITE_URL = process.env.URL || process.env.DEPLOY_URL || 'http://localhost:8888'
 
 function formatMoney(amountInCents, currency) {
   return new Intl.NumberFormat('en-IE', { style: 'currency', currency: currency.toUpperCase() }).format(
@@ -10,7 +12,7 @@ function formatMoney(amountInCents, currency) {
   )
 }
 
-function renderOrderEmailHtml(session, lineItems) {
+function renderOrderEmailHtml(session, lineItems, orderNumber) {
   const currency = session.currency
 
   const itemRows = lineItems
@@ -50,13 +52,13 @@ function renderOrderEmailHtml(session, lineItems) {
           </tr>
         </tbody>
       </table>
-      <p>Order reference: ${session.id}</p>
+      <p>Order reference: ${orderNumber}</p>
       <p>Questions about your order? Just reply to this email.</p>
     </div>
   `
 }
 
-async function sendOrderConfirmationEmail(session, lineItems) {
+async function sendOrderConfirmationEmail(session, lineItems, orderNumber) {
   if (!RESEND_API_KEY) {
     console.warn('RESEND_API_KEY not set — skipping order confirmation email')
     return
@@ -74,7 +76,7 @@ async function sendOrderConfirmationEmail(session, lineItems) {
       from: `Bushman's Blessing <${ORDER_EMAIL_FROM}>`,
       to,
       subject: "Your Bushman's Blessing order confirmation",
-      html: renderOrderEmailHtml(session, lineItems),
+      html: renderOrderEmailHtml(session, lineItems, orderNumber),
     }),
   })
 
@@ -83,7 +85,7 @@ async function sendOrderConfirmationEmail(session, lineItems) {
   }
 }
 
-function renderInternalNotificationHtml(session, lineItems) {
+function renderInternalNotificationHtml(session, lineItems, orderNumber) {
   const currency = session.currency
   const address = session.shipping_details?.address || session.customer_details?.address
   const addressLines = address
@@ -105,8 +107,8 @@ function renderInternalNotificationHtml(session, lineItems) {
 
   return `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
-      <h1 style="font-size:18px;">New order — ${formatMoney(session.amount_total, currency)}</h1>
-      <p><strong>Order reference:</strong> ${session.id}</p>
+      <h1 style="font-size:18px;">New order ${orderNumber} — ${formatMoney(session.amount_total, currency)}</h1>
+      <p><strong>Order number:</strong> ${orderNumber}</p>
       <p><strong>Customer:</strong> ${session.customer_details?.name || '(no name)'} — ${session.customer_details?.email || '(no email)'}</p>
       <p><strong>Ship to:</strong> ${addressLines}</p>
       <table style="width:100%;border-collapse:collapse;margin:12px 0;">
@@ -119,12 +121,13 @@ function renderInternalNotificationHtml(session, lineItems) {
         </thead>
         <tbody>${itemRows}</tbody>
       </table>
-      <p>Use the <a href="https://dashboard.stripe.com/payments">Stripe dashboard</a> to look up full payment details.</p>
+      <p><a href="${SITE_URL}/admin/ship?session=${session.id}" style="color:#fe5101;font-weight:bold;">Ship this order →</a></p>
+      <p style="color:#777;font-size:12px;">Stripe session: ${session.id} — use the <a href="https://dashboard.stripe.com/payments">Stripe dashboard</a> to look up full payment details.</p>
     </div>
   `
 }
 
-async function sendInternalOrderNotification(session, lineItems) {
+async function sendInternalOrderNotification(session, lineItems, orderNumber) {
   if (!RESEND_API_KEY || !ORDER_NOTIFICATION_EMAIL) {
     console.warn('RESEND_API_KEY or ORDER_NOTIFICATION_EMAIL not set — skipping internal order notification')
     return
@@ -139,8 +142,8 @@ async function sendInternalOrderNotification(session, lineItems) {
     body: JSON.stringify({
       from: `Bushman's Blessing Orders <${ORDER_EMAIL_FROM}>`,
       to: ORDER_NOTIFICATION_EMAIL,
-      subject: `New order — ${session.customer_details?.name || session.customer_details?.email || session.id}`,
-      html: renderInternalNotificationHtml(session, lineItems),
+      subject: `New order ${orderNumber} — ${session.customer_details?.name || session.customer_details?.email || orderNumber}`,
+      html: renderInternalNotificationHtml(session, lineItems, orderNumber),
     }),
   })
 
@@ -185,8 +188,9 @@ exports.handler = async event => {
         customerEmail: session.customer_details?.email,
       })
       const lineItems = session.line_items?.data || []
-      await sendOrderConfirmationEmail(session, lineItems)
-      await sendInternalOrderNotification(session, lineItems)
+      const orderNumber = await getOrCreateOrderNumber(session.id)
+      await sendOrderConfirmationEmail(session, lineItems, orderNumber)
+      await sendInternalOrderNotification(session, lineItems, orderNumber)
     } catch (err) {
       console.error('Failed to process checkout.session.completed:', err.message)
     }

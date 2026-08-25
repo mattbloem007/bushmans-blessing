@@ -2,15 +2,42 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY
 const ORDER_EMAIL_FROM = process.env.ORDER_EMAIL_FROM || 'onboarding@resend.dev'
 const ADMIN_SHIP_SECRET = process.env.ADMIN_SHIP_SECRET
 
-function renderShippingEmailHtml({ customerName, orderReference, carrier, trackingNumber, trackingUrl }) {
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function renderShippingEmailHtml({
+  customerName,
+  orderReference,
+  carrier,
+  trackingNumber,
+  trackingUrl,
+  personalMessage,
+}) {
+  // Only ever render http(s) links — a packer-supplied trackingUrl otherwise
+  // becomes a raw, unvalidated href in an email.
+  const safeTrackingUrl = /^https?:\/\//i.test(trackingUrl || '') ? trackingUrl : null
+
   return `
     <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2b2620;">
       <h1 style="font-size:20px;">Your order is on its way!</h1>
-      <p>Hi${customerName ? ` ${customerName}` : ''}, your Bushman's Blessing order has been dispatched.</p>
-      ${orderReference ? `<p><strong>Order reference:</strong> ${orderReference}</p>` : ''}
-      ${carrier ? `<p><strong>Carrier:</strong> ${carrier}</p>` : ''}
-      ${trackingNumber ? `<p><strong>Tracking number:</strong> ${trackingNumber}</p>` : ''}
-      ${trackingUrl ? `<p><a href="${trackingUrl}" style="color:#fe5101;">Track your package</a></p>` : ''}
+      <p>Hi${customerName ? ` ${escapeHtml(customerName)}` : ''}, your Bushman's Blessing order has been dispatched.</p>
+      ${orderReference ? `<p><strong>Order reference:</strong> ${escapeHtml(orderReference)}</p>` : ''}
+      ${carrier ? `<p><strong>Carrier:</strong> ${escapeHtml(carrier)}</p>` : ''}
+      ${trackingNumber ? `<p><strong>Tracking number:</strong> ${escapeHtml(trackingNumber)}</p>` : ''}
+      ${safeTrackingUrl ? `<p><a href="${safeTrackingUrl}" style="color:#fe5101;">Track your package</a></p>` : ''}
+      ${
+        personalMessage
+          ? `<p style="margin-top:20px;padding-top:20px;border-top:1px solid #e5e0d8;">${escapeHtml(
+              personalMessage
+            ).replace(/\n/g, '<br/>')}</p>`
+          : ''
+      }
       <p>Questions about your delivery? Just reply to this email.</p>
     </div>
   `
@@ -32,7 +59,16 @@ exports.handler = async event => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid request body' }) }
   }
 
-  const { password, customerEmail, customerName, orderReference, carrier, trackingNumber, trackingUrl } = body
+  const {
+    password,
+    customerEmail,
+    customerName,
+    orderReference,
+    carrier,
+    trackingNumber,
+    trackingUrl,
+    personalMessage,
+  } = body
 
   if (password !== ADMIN_SHIP_SECRET) {
     return { statusCode: 401, body: JSON.stringify({ error: 'Incorrect password' }) }
@@ -52,7 +88,14 @@ exports.handler = async event => {
       from: `Bushman's Blessing <${ORDER_EMAIL_FROM}>`,
       to: customerEmail,
       subject: "Your Bushman's Blessing order is on its way",
-      html: renderShippingEmailHtml({ customerName, orderReference, carrier, trackingNumber, trackingUrl }),
+      html: renderShippingEmailHtml({
+        customerName,
+        orderReference,
+        carrier,
+        trackingNumber,
+        trackingUrl,
+        personalMessage,
+      }),
     }),
   })
 
