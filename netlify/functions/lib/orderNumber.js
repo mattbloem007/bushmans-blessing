@@ -9,8 +9,23 @@ const MAX_ATTEMPTS = 5
 // same number on every later call for that session — so a retried Stripe
 // webhook delivery, or the ship-form looking up the same order twice, never
 // mints two numbers for one order.
+function orderNumberStore() {
+  // This site's function runtime doesn't populate NETLIFY_BLOBS_CONTEXT, so
+  // getStore()'s zero-config auto-detection throws MissingBlobsEnvironmentError.
+  // SITE_ID and NETLIFY_FUNCTIONS_TOKEN are present though, and are exactly
+  // what that auto-detection would have assembled — so supply them directly.
+  if (process.env.SITE_ID && process.env.NETLIFY_FUNCTIONS_TOKEN) {
+    return getStore({
+      name: STORE_NAME,
+      siteID: process.env.SITE_ID,
+      token: process.env.NETLIFY_FUNCTIONS_TOKEN,
+    })
+  }
+  return getStore(STORE_NAME)
+}
+
 async function getOrCreateOrderNumber(sessionId) {
-  const store = getStore(STORE_NAME)
+  const store = orderNumberStore()
   const sessionKey = `session:${sessionId}`
 
   const existing = await store.get(sessionKey)
