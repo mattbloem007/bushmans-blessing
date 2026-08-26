@@ -12,13 +12,13 @@ const MAX_ATTEMPTS = 5
 function orderNumberStore() {
   // This site's function runtime doesn't populate NETLIFY_BLOBS_CONTEXT, so
   // getStore()'s zero-config auto-detection throws MissingBlobsEnvironmentError.
-  // SITE_ID and NETLIFY_FUNCTIONS_TOKEN are present though, and are exactly
-  // what that auto-detection would have assembled — so supply them directly.
-  if (process.env.SITE_ID && process.env.NETLIFY_FUNCTIONS_TOKEN) {
+  // NETLIFY_FUNCTIONS_TOKEN isn't Blobs-scoped (401s), so this site has its
+  // own NETLIFY_BLOBS_TOKEN (a Netlify access token) configured instead.
+  if (process.env.SITE_ID && process.env.NETLIFY_BLOBS_TOKEN) {
     return getStore({
       name: STORE_NAME,
       siteID: process.env.SITE_ID,
-      token: process.env.NETLIFY_FUNCTIONS_TOKEN,
+      token: process.env.NETLIFY_BLOBS_TOKEN,
     })
   }
   return getStore(STORE_NAME)
