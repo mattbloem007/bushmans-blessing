@@ -90,7 +90,12 @@ exports.handler = async event => {
         }
       }
 
-      if (product.productType === 'physical' || product.productType === 'bundle') {
+      // Fail safe: only a product explicitly marked "digital" skips shipping
+      // collection. productType is free-text in Contentful, so a typo or an
+      // unexpected value (blank, "Physical", "merch", ...) must still
+      // require an address rather than silently letting the order through
+      // with no shipping details at all.
+      if (product.productType !== 'digital') {
         hasPhysicalItem = true
       }
 
@@ -109,6 +114,11 @@ exports.handler = async event => {
       line_items: lineItems,
       success_url: `${SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/checkout/cancel`,
+      // Stripe's default ("auto") can skip collecting a full billing address
+      // depending on the card — "required" forces name + full address on
+      // every order, matching the shipping address requirement below.
+      billing_address_collection: 'required',
+      phone_number_collection: { enabled: true },
     }
 
     // Digital-only carts skip shipping entirely. Physical/bundle carts get
