@@ -55,6 +55,18 @@ exports.createSchemaCustomization = ({ actions }) => {
       seoTitle: String
       seoDescription: String
     }
+    type ContentfulRetailer implements Node {
+      name: String
+      slug: String
+      countries: [String]
+      stripeAccountId: String
+      priceOverrideInCents: Int
+      shippingCents: Int
+      active: Boolean
+      totalFeeCents: Int
+      perSaleFeePercent: Float
+      tagline: String
+    }
   `)
 }
 
@@ -136,6 +148,34 @@ exports.createPages = async ({ graphql, actions }) => {
       context: { slug },
     })
   })
+
+  // Exclusive regional retailer pages. The geo-based redirect from "/" to a
+  // matching retailer's page is handled by netlify/edge-functions/geo-retailer-redirect.js
+  // instead of Gatsby's createRedirect — Gatsby refuses to honor a redirect
+  // on a path that already has a real page (src/pages/index.js owns "/"),
+  // so the edge function intercepts at the CDN edge before the static
+  // homepage is served, and simply passes through untouched for everyone
+  // it doesn't match. See onPostBuild below for the data file it reads.
+  const retailerResult = await graphql(`
+    query {
+      allContentfulRetailer(filter: { active: { eq: true } }) {
+        nodes {
+          slug
+          countries
+        }
+      }
+    }
+  `)
+
+  if (retailerResult.errors) throw retailerResult.errors
+
+  retailerResult.data.allContentfulRetailer.nodes.forEach(({ slug }) => {
+    createPage({
+      path: `/retailers/${slug}`,
+      component: path.resolve('./src/templates/retailer.js'),
+      context: { slug },
+    })
+  })
 }
 
 // /experiences is hidden until the site is approved by Stripe — flip
@@ -178,5 +218,36 @@ exports.onPostBuild = async ({ graphql }) => {
   fs.writeFileSync(
     path.resolve('./public/search-index.json'),
     JSON.stringify(searchIndex)
+  )
+
+  // Country -> retailer-slug map for netlify/edge-functions/geo-retailer-redirect.js.
+  // Written into the edge function's own directory so Netlify bundles it
+  // alongside the function at deploy time (edge functions can't reach into
+  // public/ or query Contentful per-request without adding latency to
+  // every homepage visit).
+  const retailerResult = await graphql(`
+    query {
+      allContentfulRetailer(filter: { active: { eq: true } }) {
+        nodes {
+          slug
+          countries
+        }
+      }
+    }
+  `)
+
+  if (retailerResult.errors) throw retailerResult.errors
+
+  const countryToSlug = {}
+  retailerResult.data.allContentfulRetailer.nodes.forEach(({ slug, countries }) => {
+    ;(countries || []).forEach(country => {
+      countryToSlug[country.toUpperCase()] = slug
+    })
+  })
+
+  fs.mkdirSync(path.resolve('./netlify/edge-functions/data'), { recursive: true })
+  fs.writeFileSync(
+    path.resolve('./netlify/edge-functions/data/retailer-map.js'),
+    `export default ${JSON.stringify(countryToSlug)}\n`
   )
 }

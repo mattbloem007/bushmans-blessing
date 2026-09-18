@@ -9,6 +9,9 @@ export default function BuyNowButton({
   className = '',
   wrapperClassName = 'inline-flex flex-col',
   children,
+  // When set, checkout routes to that retailer's own Stripe Connect account
+  // (create-retailer-checkout-session.js) instead of the platform account.
+  retailerSlug = null,
 }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -17,10 +20,16 @@ export default function BuyNowButton({
     setError(null)
     setLoading(true)
     try {
-      const res = await fetch('/.netlify/functions/create-checkout-session', {
+      const endpoint = retailerSlug
+        ? '/.netlify/functions/create-retailer-checkout-session'
+        : '/.netlify/functions/create-checkout-session'
+      const body = retailerSlug
+        ? { retailerSlug, items: [{ slug, quantity }] }
+        : { items: [{ slug, quantity }] }
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: [{ slug, quantity }] }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error('Checkout could not be started — please try again.')
       const { url } = await res.json()

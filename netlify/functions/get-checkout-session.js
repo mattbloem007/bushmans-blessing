@@ -14,12 +14,21 @@ exports.handler = async event => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing session_id' }) }
   }
 
+  // Retailer checkouts (create-retailer-checkout-session.js) create the
+  // session directly on the retailer's connected account, so it has to be
+  // retrieved from that same account — it doesn't exist on the platform
+  // account. The account id travels through success_url's query string.
+  const account = event.queryStringParameters?.account
+  const requestOptions = account && /^acct_/.test(account) ? { stripeAccount: account } : undefined
+
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY)
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items'],
-    })
+    const session = await stripe.checkout.sessions.retrieve(
+      sessionId,
+      { expand: ['line_items'] },
+      requestOptions
+    )
 
     return {
       statusCode: 200,

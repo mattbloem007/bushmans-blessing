@@ -16,12 +16,17 @@ export default function CheckoutSuccessPage({ location }) {
   const { clear } = useCart()
 
   useEffect(() => {
-    const sessionId = new URLSearchParams(location.search).get('session_id')
+    const params = new URLSearchParams(location.search)
+    const sessionId = params.get('session_id')
     if (!sessionId) {
       setError('Missing order reference.')
       return
     }
-    fetch(`/.netlify/functions/get-checkout-session?session_id=${encodeURIComponent(sessionId)}`)
+    // Retailer checkouts pass their Stripe Connect account id through here —
+    // that session lives on their account, not the platform account.
+    const account = params.get('account')
+    const accountParam = account ? `&account=${encodeURIComponent(account)}` : ''
+    fetch(`/.netlify/functions/get-checkout-session?session_id=${encodeURIComponent(sessionId)}${accountParam}`)
       .then(res => {
         if (!res.ok) throw new Error('Order not found')
         return res.json()

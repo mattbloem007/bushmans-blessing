@@ -1,8 +1,6 @@
 const Stripe = require('stripe')
+const { fetchProductBySlug } = require('./lib/contentful')
 
-const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
-const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN
-const CONTENTFUL_ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || 'master'
 const SITE_URL = process.env.URL || process.env.DEPLOY_URL || 'http://localhost:8888'
 const MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID = process.env.MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID
 
@@ -24,26 +22,6 @@ const EU_COUNTRIES = [
   'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK',
   'SI', 'ES', 'SE',
 ]
-
-// Re-resolves each cart item against Contentful by slug — the client's
-// submitted price/type is never trusted for the actual Stripe line item.
-async function fetchProductBySlug(slug) {
-  const url = `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?content_type=product&fields.slug=${encodeURIComponent(slug)}&limit=1`
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${CONTENTFUL_ACCESS_TOKEN}` },
-  })
-  if (!res.ok) throw new Error(`Contentful lookup failed for "${slug}"`)
-  const data = await res.json()
-  const entry = data.items?.[0]
-  if (!entry) return null
-  return {
-    name: entry.fields.name,
-    slug: entry.fields.slug,
-    productType: entry.fields.productType || 'physical',
-    stripePriceId: entry.fields.stripePriceId,
-    inStock: entry.fields.inStock !== false,
-  }
-}
 
 exports.handler = async event => {
   if (event.httpMethod !== 'POST') {
