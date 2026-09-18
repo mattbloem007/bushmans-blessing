@@ -1,5 +1,6 @@
 const Stripe = require('stripe')
 const { fetchProductBySlug, fetchRetailerBySlug } = require('./lib/contentful')
+const { getPaidCents } = require('./lib/retailerLedger')
 
 const SITE_URL = process.env.URL || process.env.DEPLOY_URL || 'http://localhost:8888'
 
@@ -120,8 +121,26 @@ exports.handler = async event => {
       ]
     }
 
-    // Phase 2 will add payment_intent_data.application_fee_amount here for
-    // retailers still paying off their licensing fee (see the build plan).
+    // Licensing-fee payment plan: while the retailer hasn't yet paid off
+    // their totalFeeCents (a flat-rate retailer leaves this at 0 and never
+    // hits this branch), each sale carries an application fee — collected
+    // by Stripe as part of the same charge, routed to the platform account
+    // automatically. Applied to the product subtotal only, not shipping.
+    // "Paid off" is derived live from the ledger vs. the contract terms, so
+    // there's no separate status flag that could drift out of sync.
+    if (retailer.totalFeeCents > 0) {
+      const paidCents = await getPaidCents(retailer.stripeAccountId)
+      const remainingOwed = Math.max(0, retailer.totalFeeCents - paidCents)
+      if (remainingOwed > 0) {
+        const feeCents = Math.min(
+          remainingOwed,
+          Math.round((subtotalCents * retailer.perSaleFeePercent) / 100)
+        )
+        if (feeCents > 0) {
+          sessionConfig.payment_intent_data = { application_fee_amount: feeCents }
+        }
+      }
+    }
 
     const session = await stripe.checkout.sessions.create(sessionConfig, {
       stripeAccount: retailer.stripeAccountId,
