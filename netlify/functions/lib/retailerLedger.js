@@ -1,7 +1,7 @@
 const { getStore } = require('@netlify/blobs')
 
 const STORE_NAME = 'retailer-ledger'
-const MAX_ATTEMPTS = 5
+const MAX_ATTEMPTS = 10
 
 // Keyed by Stripe Connect account id rather than the Contentful retailer
 // slug — both the checkout function and the Connect webhook already have
@@ -47,7 +47,10 @@ async function addPaidCents(stripeAccountId, amountCents) {
       : await store.set(key, String(next), { onlyIfNew: true })
 
     if (write.modified) return next
-    // lost the race to another concurrent sale — retry with the latest value
+    // Lost the race to another concurrent sale on the same retailer — back
+    // off with jitter before retrying, so competing writers don't just
+    // collide again on the next attempt in lockstep.
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 50))
   }
 
   throw new Error(`Could not update retailer ledger for "${stripeAccountId}" after retries`)
