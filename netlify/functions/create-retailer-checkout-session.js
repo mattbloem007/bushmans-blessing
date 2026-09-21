@@ -1,6 +1,7 @@
 const Stripe = require('stripe')
 const { fetchProductBySlug, fetchRetailerBySlug } = require('./lib/contentful')
 const { getPaidCents } = require('./lib/retailerLedger')
+const { COMMUNITY_GIVEBACK_CENTS_BY_SLUG } = require('./lib/giveback')
 
 const SITE_URL = process.env.URL || process.env.DEPLOY_URL || 'http://localhost:8888'
 
@@ -53,6 +54,7 @@ exports.handler = async event => {
     const lineItems = []
     let hasPhysicalItem = false
     let subtotalCents = 0
+    let mantisCents = 0
 
     for (const { slug, quantity } of items) {
       const qty = Number(quantity)
@@ -80,6 +82,7 @@ exports.handler = async event => {
       }
 
       subtotalCents += unitAmount * qty
+      mantisCents += (COMMUNITY_GIVEBACK_CENTS_BY_SLUG[slug] || 0) * qty
       lineItems.push({
         quantity: qty,
         price_data: {
@@ -121,24 +124,35 @@ exports.handler = async event => {
       ]
     }
 
-    // Licensing-fee payment plan: while the retailer hasn't yet paid off
-    // their totalFeeCents (a flat-rate retailer leaves this at 0 and never
-    // hits this branch), each sale carries an application fee — collected
-    // by Stripe as part of the same charge, routed to the platform account
-    // automatically. Applied to the product subtotal only, not shipping.
-    // "Paid off" is derived live from the ledger vs. the contract terms, so
-    // there's no separate status flag that could drift out of sync.
+    // A retailer's direct charge can only carry ONE combined
+    // application_fee_amount, so two independent per-sale deductions —
+    // the Mantis Collective community giveback (permanent, every sale)
+    // and the licensing-fee payment plan (temporary, stops once paid off)
+    // — are summed into a single fee here. Each component's amount is
+    // stashed in payment_intent metadata so stripe-connect-webhook.js can
+    // split them back apart afterward: update the ledger with only the
+    // licensing portion, and forward only the Mantis portion on to that
+    // account, without needing to recompute anything from line items.
+    let licensingCents = 0
     if (retailer.totalFeeCents > 0) {
       const paidCents = await getPaidCents(retailer.stripeAccountId)
       const remainingOwed = Math.max(0, retailer.totalFeeCents - paidCents)
       if (remainingOwed > 0) {
-        const feeCents = Math.min(
+        licensingCents = Math.min(
           remainingOwed,
           Math.round((subtotalCents * retailer.perSaleFeePercent) / 100)
         )
-        if (feeCents > 0) {
-          sessionConfig.payment_intent_data = { application_fee_amount: feeCents }
-        }
+      }
+    }
+
+    const totalFeeCents = mantisCents + licensingCents
+    if (totalFeeCents > 0) {
+      sessionConfig.payment_intent_data = {
+        application_fee_amount: totalFeeCents,
+        metadata: {
+          mantisCents: String(mantisCents),
+          licensingFeeCents: String(licensingCents),
+        },
       }
     }
 

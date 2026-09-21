@@ -1,14 +1,8 @@
 const Stripe = require('stripe')
 const { fetchProductBySlug } = require('./lib/contentful')
+const { MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID, COMMUNITY_GIVEBACK_CENTS_BY_SLUG } = require('./lib/giveback')
 
 const SITE_URL = process.env.URL || process.env.DEPLOY_URL || 'http://localhost:8888'
-const MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID = process.env.MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID
-
-// Per-unit amount (cents, EUR) transferred to the Mantis Collective connected
-// account on each sale, keyed by product slug.
-const COMMUNITY_GIVEBACK_CENTS_BY_SLUG = {
-  'kanna-tincture': 350,
-}
 
 // Orders qualify for free shipping once the cart holds at least this many
 // units of the given product slug.
