@@ -37,7 +37,12 @@ exports.handler = async event => {
       application.status = 'approved'
       application.approvedAt = new Date().toISOString()
       await store.set(payload.applicationId, JSON.stringify(application))
+    }
 
+    // Tracked separately from `status` so that if the invite email failed
+    // to send (e.g. a Resend error), re-clicking this same approval link
+    // retries just the send instead of being a permanent no-op.
+    if (!application.inviteSentAt) {
       const signupToken = signToken(
         'signup',
         { applicationId: application.id, email: application.email, companyName: application.companyName },
@@ -45,6 +50,8 @@ exports.handler = async event => {
       )
       const products = await fetchAllWholesaleProducts()
       await sendSignupInvite(application.email, application.companyName, signupToken, products)
+      application.inviteSentAt = new Date().toISOString()
+      await store.set(payload.applicationId, JSON.stringify(application))
     }
 
     return htmlResponse(

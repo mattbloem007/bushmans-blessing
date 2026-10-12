@@ -19,7 +19,9 @@ async function sendEmail({ to, subject, html }) {
     body: JSON.stringify({ from: `Bushman's Blessing <${ORDER_EMAIL_FROM}>`, to, subject, html }),
   })
   if (!res.ok) {
-    console.error(`Failed to send email "${subject}":`, res.status, await res.text())
+    const body = await res.text()
+    console.error(`Failed to send email "${subject}":`, res.status, body)
+    throw new Error(`Resend API error sending "${subject}" (${res.status})`)
   }
 }
 
