@@ -35,9 +35,9 @@ const ctx = { spaceId: SPACE_ID, environmentId: ENVIRONMENT }
 // Same three SKUs as scripts/seed-wholesale-products.js — kept in sync by
 // hand since this only ever runs once per SKU.
 const SKUS = [
-  { entryId: 'kanna-bulk-500ml', name: 'Kanna Bulk — 500ml', unitPriceInCents: 180000 },
-  { entryId: 'kanna-bulk-1l', name: 'Kanna Bulk — 1L', unitPriceInCents: 330000 },
-  { entryId: 'kanna-5ml-labelled-case', name: 'Kanna Tincture 5ml — Labelled', unitPriceInCents: 2200 },
+  { entryId: 'kanna-bulk-500ml', name: 'Kanna Bulk — 500ml', unitPriceInCents: 211750 },
+  { entryId: 'kanna-bulk-1l', name: 'Kanna Bulk — 1L', unitPriceInCents: 393250 },
+  { entryId: 'kanna-5ml-labelled-case', name: 'Kanna Tincture 5ml — Labelled', unitPriceInCents: 2420 },
 ]
 
 async function isLivePrice(priceId) {

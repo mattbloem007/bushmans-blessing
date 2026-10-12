@@ -28,26 +28,29 @@ const ctx = { spaceId: SPACE_ID, environmentId: ENVIRONMENT }
 
 const SKUS = [
   {
+    // €1750 ex VAT, incl. 21% VAT.
     entryId: 'kanna-bulk-500ml',
     name: 'Kanna Bulk — 500ml',
     sizeLabel: '500ml — unbottled & unlabelled',
-    unitPriceInCents: 180000,
+    unitPriceInCents: 211750,
     minQuantity: 1,
     unbottled: true,
   },
   {
+    // €3250 ex VAT, incl. 21% VAT.
     entryId: 'kanna-bulk-1l',
     name: 'Kanna Bulk — 1L',
     sizeLabel: '1L — unbottled & unlabelled',
-    unitPriceInCents: 330000,
+    unitPriceInCents: 393250,
     minQuantity: 1,
     unbottled: true,
   },
   {
+    // €20 ex VAT, incl. 21% VAT.
     entryId: 'kanna-5ml-labelled-case',
     name: 'Kanna Tincture 5ml — Labelled',
     sizeLabel: '5ml, labelled, sold per bottle (30 minimum)',
-    unitPriceInCents: 2200,
+    unitPriceInCents: 2420,
     minQuantity: 30,
     unbottled: false,
   },

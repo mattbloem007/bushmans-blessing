@@ -122,7 +122,7 @@ export default function WholesalePortalPage() {
                       <h2 className="text-dust-grey-950 font-medium">{product.name}</h2>
                       <p className="text-dust-grey-600 text-sm">{product.sizeLabel}</p>
                       <p className="text-rusty-spice-500 text-sm mt-1">
-                        {formatPrice(product.unitPriceInCents)}
+                        {formatPrice(product.unitPriceInCents)} incl. VAT
                         {product.minQuantity > 1 ? ` — minimum order ${product.minQuantity}` : ''}
                       </p>
                     </div>
@@ -148,7 +148,7 @@ export default function WholesalePortalPage() {
           {cartItems.length > 0 && (
             <div className="bg-white border border-dust-grey-200 rounded p-6 space-y-4">
               <div className="flex justify-between text-dust-grey-950 font-medium">
-                <span>Subtotal</span>
+                <span>Subtotal (incl. VAT)</span>
                 <span>{formatPrice(subtotalCents)}</span>
               </div>
 

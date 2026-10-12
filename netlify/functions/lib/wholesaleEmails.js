@@ -80,7 +80,7 @@ async function sendSignupInvite(email, companyName, signupToken, products = []) 
           <tr>
             <th style="text-align:left;padding:6px 8px;border-bottom:2px solid #2b2620;">Item</th>
             <th style="text-align:left;padding:6px 8px;border-bottom:2px solid #2b2620;"></th>
-            <th style="text-align:right;padding:6px 8px;border-bottom:2px solid #2b2620;">Price</th>
+            <th style="text-align:right;padding:6px 8px;border-bottom:2px solid #2b2620;">Price (incl. VAT)</th>
           </tr>
         </thead>
         <tbody>${priceRows}</tbody>
