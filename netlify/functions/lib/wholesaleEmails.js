@@ -55,18 +55,47 @@ async function sendApplicationNotification(application, approveToken) {
   })
 }
 
-// Sent to the wholesaler once approved — a one-time link to set their own
-// password. No password is ever emailed.
-async function sendSignupInvite(email, companyName, signupToken) {
+// Sent to the wholesaler once approved — includes current pricing (never
+// shown on the public /wholesale page) so they can decide whether this is
+// a fit before setting up an account, plus a one-time link to set their
+// own password. No password is ever emailed.
+async function sendSignupInvite(email, companyName, signupToken, products = []) {
   const signupUrl = `${SITE_URL}/wholesale/signup?token=${encodeURIComponent(signupToken)}`
+
+  const priceRows = products
+    .map(
+      p => `
+        <tr>
+          <td style="padding:6px 8px;border-bottom:1px solid #e5e0d8;">${p.name}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #e5e0d8;color:#777;">${p.sizeLabel}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #e5e0d8;text-align:right;">${formatMoney(p.unitPriceInCents, 'eur')}${p.minQuantity > 1 ? ` (min ${p.minQuantity})` : ''}</td>
+        </tr>`
+    )
+    .join('')
+
+  const pricingTable = products.length
+    ? `
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:6px 8px;border-bottom:2px solid #2b2620;">Item</th>
+            <th style="text-align:left;padding:6px 8px;border-bottom:2px solid #2b2620;"></th>
+            <th style="text-align:right;padding:6px 8px;border-bottom:2px solid #2b2620;">Price</th>
+          </tr>
+        </thead>
+        <tbody>${priceRows}</tbody>
+      </table>`
+    : ''
 
   await sendEmail({
     to: email,
-    subject: "You're approved — set up your Bushman's Blessing wholesale account",
+    subject: "You're approved — Bushman's Blessing wholesale pricing + account setup",
     html: `
       <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2b2620;">
         <h1 style="font-size:20px;">Welcome, ${companyName}.</h1>
-        <p>Your wholesale application has been approved. Set a password to access the wholesale portal and place orders.</p>
+        <p>Your wholesale application has been approved. Here's our current pricing:</p>
+        ${pricingTable}
+        <p>If this works for you, set a password below to access the wholesale portal and place an order. No obligation if you'd rather not move forward.</p>
         <p style="margin-top:24px;">
           <a href="${signupUrl}" style="background:#fe5101;color:#fff;padding:12px 20px;border-radius:4px;text-decoration:none;font-weight:bold;">
             Set up your account →

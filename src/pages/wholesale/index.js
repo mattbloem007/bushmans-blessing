@@ -5,10 +5,13 @@ import Seo from '../../components/Seo'
 import KannaSymbol from '../../components/icons/KannaSymbol'
 import WavyDivider from '../../components/WavyDivider'
 
+// Pricing is deliberately not shown here — it's only sent to applicants
+// once their application is approved (see wholesale-approve.js), so they
+// can decide whether to move forward before it's public.
 const SKUS = [
-  { name: '500ml Bulk', detail: 'Unbottled & unlabelled', price: '€1,800' },
-  { name: '1L Bulk', detail: 'Unbottled & unlabelled', price: '€3,300' },
-  { name: '5ml Labelled Case', detail: 'Pre-labelled, sold per bottle — 30 minimum', price: '€22 / bottle' },
+  { name: '500ml Bulk', detail: 'Unbottled & unlabelled' },
+  { name: '1L Bulk', detail: 'Unbottled & unlabelled' },
+  { name: '5ml Labelled Case', detail: 'Pre-labelled, sold per bottle — 30 minimum' },
 ]
 
 export default function WholesalePage() {
@@ -48,10 +51,7 @@ export default function WholesalePage() {
                 >
                   {sku.name}
                 </h2>
-                <p className="text-dust-grey-600 text-sm mb-4">{sku.detail}</p>
-                <p className="text-rusty-spice-500 text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
-                  {sku.price}
-                </p>
+                <p className="text-dust-grey-600 text-sm">{sku.detail}</p>
               </div>
             ))}
           </div>
@@ -77,7 +77,8 @@ export default function WholesalePage() {
 
           <div className="max-w-md mx-auto text-center">
             <p className="text-dust-grey-800 mb-6">
-              Access to wholesale pricing and ordering is by verified account only.
+              Pricing is shared once your application is reviewed, so you can decide if it's a fit
+              before setting up an account.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

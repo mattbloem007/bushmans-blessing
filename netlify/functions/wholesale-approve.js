@@ -1,5 +1,6 @@
 const { wholesaleStore, signToken, verifyToken } = require('./lib/wholesaleAuth')
 const { sendSignupInvite } = require('./lib/wholesaleEmails')
+const { fetchAllWholesaleProducts } = require('./lib/contentful')
 
 function htmlResponse(statusCode, message) {
   return {
@@ -42,7 +43,8 @@ exports.handler = async event => {
         { applicationId: application.id, email: application.email, companyName: application.companyName },
         7 * 24 * 60 * 60
       )
-      await sendSignupInvite(application.email, application.companyName, signupToken)
+      const products = await fetchAllWholesaleProducts()
+      await sendSignupInvite(application.email, application.companyName, signupToken, products)
     }
 
     return htmlResponse(
