@@ -39,7 +39,13 @@ export default function Footer() {
 
   const shopPaths = ['/', '/shop', '/kanna']
   const shopLinks = navItems.filter((item) => shopPaths.includes(item.linkDestination))
-  const companyLinks = navItems.filter((item) => !shopPaths.includes(item.linkDestination))
+  // Wholesale is a static, rarely-changing link — kept out of the CMS feed
+  // the same way legalLinks below is, rather than requiring a Navigation
+  // entry for it.
+  const companyLinks = [
+    ...navItems.filter((item) => !shopPaths.includes(item.linkDestination)),
+    { label: 'Wholesale', linkDestination: '/wholesale' },
+  ]
 
   // Legal pages are static/rarely change, so they're kept out of the CMS-driven
   // Navigation list (which also feeds the header) to avoid cluttering the main nav.

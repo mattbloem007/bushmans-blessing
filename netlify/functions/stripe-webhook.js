@@ -1,6 +1,7 @@
 const Stripe = require('stripe')
 const { getOrCreateOrderNumber } = require('./lib/orderNumber')
 const { formatMoney, sendInternalOrderNotification } = require('./lib/orderEmails')
+const { sendWholesaleOrderConfirmation, sendWholesaleInternalNotification } = require('./lib/wholesaleEmails')
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const ORDER_EMAIL_FROM = process.env.ORDER_EMAIL_FROM || 'onboarding@resend.dev'
@@ -115,11 +116,53 @@ exports.handler = async event => {
       })
       const lineItems = session.line_items?.data || []
       const orderNumber = await getOrCreateOrderNumber(session.id)
-      await sendOrderConfirmationEmail(session, lineItems, orderNumber)
-      await sendInternalOrderNotification(session, lineItems, orderNumber)
+
+      if (session.metadata?.orderType === 'wholesale') {
+        // A bank-transfer wholesale order completes this session as
+        // "unpaid" immediately — the real confirmation fires later, from
+        // checkout.session.async_payment_succeeded below, once funds
+        // actually settle. Only a paid (card) session confirms here.
+        if (session.payment_status === 'paid') {
+          await sendWholesaleOrderConfirmation(session, lineItems, orderNumber)
+          await sendWholesaleInternalNotification(session, lineItems, orderNumber)
+        }
+      } else {
+        await sendOrderConfirmationEmail(session, lineItems, orderNumber)
+        await sendInternalOrderNotification(session, lineItems, orderNumber)
+      }
     } catch (err) {
       console.error('Failed to process checkout.session.completed:', err.message)
     }
+  }
+
+  if (stripeEvent.type === 'checkout.session.async_payment_succeeded') {
+    const sessionId = stripeEvent.data.object.id
+    try {
+      const session = await stripe.checkout.sessions.retrieve(sessionId, {
+        expand: ['line_items'],
+      })
+      const lineItems = session.line_items?.data || []
+      const orderNumber = await getOrCreateOrderNumber(session.id)
+
+      if (session.metadata?.orderType === 'wholesale') {
+        await sendWholesaleOrderConfirmation(session, lineItems, orderNumber)
+        await sendWholesaleInternalNotification(session, lineItems, orderNumber)
+      } else {
+        await sendOrderConfirmationEmail(session, lineItems, orderNumber)
+        await sendInternalOrderNotification(session, lineItems, orderNumber)
+      }
+    } catch (err) {
+      console.error('Failed to process checkout.session.async_payment_succeeded:', err.message)
+    }
+  }
+
+  if (stripeEvent.type === 'checkout.session.async_payment_failed') {
+    const session = stripeEvent.data.object
+    console.warn('checkout.session.async_payment_failed', {
+      id: session.id,
+      orderType: session.metadata?.orderType,
+      customerEmail: session.customer_details?.email,
+    })
   }
 
   return { statusCode: 200, body: JSON.stringify({ received: true }) }
