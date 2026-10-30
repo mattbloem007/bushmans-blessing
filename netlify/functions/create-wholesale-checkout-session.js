@@ -1,6 +1,7 @@
 const Stripe = require('stripe')
 const { getSessionEmail, wholesaleStore } = require('./lib/wholesaleAuth')
 const { fetchWholesaleProductBySlug } = require('./lib/contentful')
+const { MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID, WHOLESALE_GIVEBACK_CENTS_BY_SLUG } = require('./lib/giveback')
 
 const SITE_URL = process.env.URL || process.env.DEPLOY_URL || 'http://localhost:8888'
 
@@ -43,6 +44,7 @@ exports.handler = async event => {
 
     const lineItems = []
     let hasUnbottledItem = false
+    let givebackCents = 0
 
     for (const { slug, quantity } of items) {
       const qty = Number(quantity)
@@ -72,6 +74,14 @@ exports.handler = async event => {
       }
 
       if (product.unbottled) hasUnbottledItem = true
+      const perUnitGiveback = WHOLESALE_GIVEBACK_CENTS_BY_SLUG[slug]
+      // A SKU with no rate would silently donate nothing, so make a missing
+      // entry visible in the function logs rather than quietly costing Mantis
+      // its share.
+      if (!perUnitGiveback) {
+        console.warn(`Wholesale SKU "${slug}" has no Mantis Collective giveback rate — this line adds €0`)
+      }
+      givebackCents += (perUnitGiveback || 0) * qty
       lineItems.push({ price: product.stripePriceId, quantity: qty })
     }
 
@@ -87,6 +97,7 @@ exports.handler = async event => {
       email,
       companyName: wholesaler.companyName,
       packagingAcknowledged: hasUnbottledItem && packagingAcknowledged === true,
+      givebackCents,
     })
 
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) }
@@ -104,7 +115,7 @@ exports.handler = async event => {
 // (and redeploy) once the Dashboard toggle is on.
 const BANK_TRANSFER_ENABLED = process.env.WHOLESALE_BANK_TRANSFER_ENABLED === 'true'
 
-async function stripeCheckoutSession({ lineItems, email, companyName, packagingAcknowledged }) {
+async function stripeCheckoutSession({ lineItems, email, companyName, packagingAcknowledged, givebackCents }) {
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY)
 
   const sessionConfig = {
@@ -123,6 +134,25 @@ async function stripeCheckoutSession({ lineItems, email, companyName, packagingA
       companyName,
       packagingAcknowledged: String(packagingAcknowledged),
     },
+  }
+
+  // Same mechanism as create-checkout-session.js — routes Mantis
+  // Collective's per-unit share straight to their connected Stripe account
+  // as part of the same payment, on the platform's own account (wholesale
+  // never uses a retailer's direct-charge flow).
+  if (givebackCents > 0) {
+    if (MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID) {
+      sessionConfig.payment_intent_data = {
+        transfer_data: {
+          destination: MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID,
+          amount: givebackCents,
+        },
+      }
+    } else {
+      console.warn(
+        'Wholesale order owes a Mantis Collective giveback but MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID is not set — skipping transfer'
+      )
+    }
   }
 
   if (BANK_TRANSFER_ENABLED) {
