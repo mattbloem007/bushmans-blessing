@@ -1,0 +1,51 @@
+{
+  "event": {
+    "title": "Kanna, Online",
+    "startsAtISO": "2026-11-28T18:00:00Z",
+    "dateLabel": "Saturday 28 November",
+    "timeLabel": "19:00 CET / 20:00 SAST",
+    "durationLabel": "about 90 minutes",
+    "platform": "Jitsi",
+    "joinUrl": "https://meet.jit.si/BushmansBlessingKanna"
+  },
+  "bundleCutoff": {
+    "atISO": "2026-11-21T22:59:59Z",
+    "label": "Saturday 21 November"
+  },
+  "currency": "eur",
+  "options": [
+    {
+      "id": "experience",
+      "label": "The Experience",
+      "checkoutName": "Kanna, Online — Experience (28 November)",
+      "checkoutDescription": "Live online gathering, Saturday 28 November, 19:00 CET / 20:00 SAST. Join link sent by email on the day.",
+      "priceInCents": 2000,
+      "requiresShipping": false,
+      "includesSample": false,
+      "includesBottle": false,
+      "givebackCents": 0
+    },
+    {
+      "id": "experience-sample",
+      "label": "Experience + Sample",
+      "checkoutName": "Kanna, Online — Experience + 5ml Sample",
+      "checkoutDescription": "Live online gathering plus a 5ml sample of Bushman's Blessing Kanna Tincture, posted to arrive before the evening.",
+      "priceInCents": 3000,
+      "requiresShipping": true,
+      "includesSample": true,
+      "includesBottle": false,
+      "givebackCents": 0
+    },
+    {
+      "id": "experience-bottle",
+      "label": "Experience + Full Bottle",
+      "checkoutName": "Kanna, Online — Experience + Full Bottle",
+      "checkoutDescription": "Live online gathering plus a full bottle of Bushman's Blessing Kanna Tincture, posted to arrive before the evening.",
+      "priceInCents": 6000,
+      "requiresShipping": true,
+      "includesSample": false,
+      "includesBottle": true,
+      "givebackCents": 400
+    }
+  ]
+}

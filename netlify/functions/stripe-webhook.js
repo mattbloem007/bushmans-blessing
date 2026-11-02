@@ -2,6 +2,8 @@ const Stripe = require('stripe')
 const { getOrCreateOrderNumber } = require('./lib/orderNumber')
 const { formatMoney, sendInternalOrderNotification } = require('./lib/orderEmails')
 const { sendWholesaleOrderConfirmation, sendWholesaleInternalNotification } = require('./lib/wholesaleEmails')
+const { getOption, recordParticipant } = require('./lib/kannaOnline')
+const { sendExperienceConfirmation, sendExperienceInternalNotification } = require('./lib/experienceEmails')
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const ORDER_EMAIL_FROM = process.env.ORDER_EMAIL_FROM || 'onboarding@resend.dev'
@@ -79,6 +81,28 @@ async function sendOrderConfirmationEmail(session, lineItems, orderNumber) {
   }
 }
 
+// Kanna Online signups are recorded once per Stripe session, and only
+// confirmed when the session is actually paid — the record is also what the
+// /admin/experience mailing-list and join-link tools read from.
+async function confirmExperienceSignup(session) {
+  if (session.payment_status !== 'paid') return
+
+  const option = getOption(session.metadata?.experienceOption)
+  if (!option) {
+    console.error('Kanna Online session has an unknown option:', session.metadata?.experienceOption)
+    return
+  }
+
+  const { participant, duplicate } = await recordParticipant(session, option)
+  if (duplicate) {
+    console.log('Kanna Online signup already recorded — skipping emails:', session.id)
+    return
+  }
+
+  await sendExperienceConfirmation(participant)
+  await sendExperienceInternalNotification(participant)
+}
+
 // Verifies and acknowledges Stripe events so Stripe doesn't retry, and
 // sends the customer their order confirmation email on completed checkouts.
 exports.handler = async event => {
@@ -115,18 +139,21 @@ exports.handler = async event => {
         customerEmail: session.customer_details?.email,
       })
       const lineItems = session.line_items?.data || []
-      const orderNumber = await getOrCreateOrderNumber(session.id)
 
-      if (session.metadata?.orderType === 'wholesale') {
+      if (session.metadata?.orderType === 'experience') {
+        await confirmExperienceSignup(session)
+      } else if (session.metadata?.orderType === 'wholesale') {
         // A bank-transfer wholesale order completes this session as
         // "unpaid" immediately — the real confirmation fires later, from
         // checkout.session.async_payment_succeeded below, once funds
         // actually settle. Only a paid (card) session confirms here.
         if (session.payment_status === 'paid') {
+          const orderNumber = await getOrCreateOrderNumber(session.id)
           await sendWholesaleOrderConfirmation(session, lineItems, orderNumber)
           await sendWholesaleInternalNotification(session, lineItems, orderNumber)
         }
       } else {
+        const orderNumber = await getOrCreateOrderNumber(session.id)
         await sendOrderConfirmationEmail(session, lineItems, orderNumber)
         await sendInternalOrderNotification(session, lineItems, orderNumber)
       }
@@ -142,12 +169,15 @@ exports.handler = async event => {
         expand: ['line_items'],
       })
       const lineItems = session.line_items?.data || []
-      const orderNumber = await getOrCreateOrderNumber(session.id)
 
-      if (session.metadata?.orderType === 'wholesale') {
+      if (session.metadata?.orderType === 'experience') {
+        await confirmExperienceSignup(session)
+      } else if (session.metadata?.orderType === 'wholesale') {
+        const orderNumber = await getOrCreateOrderNumber(session.id)
         await sendWholesaleOrderConfirmation(session, lineItems, orderNumber)
         await sendWholesaleInternalNotification(session, lineItems, orderNumber)
       } else {
+        const orderNumber = await getOrCreateOrderNumber(session.id)
         await sendOrderConfirmationEmail(session, lineItems, orderNumber)
         await sendInternalOrderNotification(session, lineItems, orderNumber)
       }
