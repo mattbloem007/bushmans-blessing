@@ -133,6 +133,11 @@ async function sendExperienceInternalNotification(participant) {
         <p><strong>Option:</strong> ${participant.optionLabel}${option ? ` — ${formatEuro(option.priceInCents)}` : ''}</p>
         <p><strong>Paid:</strong> ${formatEuro(participant.amountPaid)}</p>
         ${
+          participant.mantisShareCents > 0
+            ? `<p><strong>Mantis Collective share:</strong> ${formatEuro(participant.mantisShareCents)} — sent automatically with the payment.</p>`
+            : ''
+        }
+        ${
           participant.requiresShipping
             ? `<p><strong>Post to:</strong> ${formatAddress(participant.shippingAddress)}</p>
                <p style="color:#a3541f;"><strong>Action:</strong> this one includes a parcel — it needs to

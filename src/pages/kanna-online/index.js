@@ -14,6 +14,9 @@ import KannaOnlineCheckoutButton from '../../components/KannaOnlineCheckoutButto
 
 const { event, bundleCutoff, options } = config
 const CHEAPEST = Math.min(...options.map(option => option.priceInCents))
+// Every option sends the same per-place cost to Mantis Collective; the page
+// only advertises it if the config actually carries one.
+const MANTIS_SHARE = Math.min(...options.map(option => option.mantisShareCents || 0))
 
 function formatPrice(cents) {
   return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(cents / 100)
@@ -595,6 +598,13 @@ export default function KannaOnlinePage() {
           Bundles close on {bundleCutoff.label} so that parcels arrive in time. After that, the
           experience-only place stays open right up to the evening.
         </p>
+
+        {MANTIS_SHARE > 0 && (
+          <p className="text-dust-grey-950 text-sm mb-10 max-w-2xl border-l-2 border-rusty-spice-500 pl-4">
+            {formatPrice(MANTIS_SHARE)} of every place goes directly to Mantis Collective, our partners
+            in Southern Africa.
+          </p>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {options.map(option => (

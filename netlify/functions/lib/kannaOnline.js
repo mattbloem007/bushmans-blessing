@@ -40,6 +40,7 @@ function participantFromSession(session, option) {
     optionId: option.id,
     optionLabel: option.label,
     amountPaid: session.amount_total,
+    mantisShareCents: option.mantisShareCents || 0,
     currency: session.currency,
     purchasedAt: new Date().toISOString(),
     requiresShipping: option.requiresShipping,

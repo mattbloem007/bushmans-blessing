@@ -104,19 +104,22 @@ exports.handler = async event => {
     }))
   }
 
-  // The full bottle carries the same per-bottle community giveback as a
-  // normal shop order. The 5ml sample doesn't — it's a taste, not a bottle.
-  if (option.givebackCents > 0) {
+  // The experience itself is delivered with Mantis Collective, so the cost of
+  // a place (mantisShareCents in shared/kanna-online.json) is sent straight
+  // to their connected account as part of the same payment. Whatever the
+  // sample or bottle adds stays with the company — this page deliberately
+  // carries no per-bottle giveback on top.
+  if (option.mantisShareCents > 0) {
     if (MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID) {
       sessionConfig.payment_intent_data = {
         transfer_data: {
           destination: MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID,
-          amount: option.givebackCents,
+          amount: option.mantisShareCents,
         },
       }
     } else {
       console.warn(
-        'Kanna Online bottle option has a giveback but MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID is not set — skipping transfer'
+        'Kanna Online carries a Mantis Collective share but MANTIS_COLLECTIVE_STRIPE_ACCOUNT_ID is not set — skipping transfer'
       )
     }
   }

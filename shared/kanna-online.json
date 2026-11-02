@@ -20,10 +20,10 @@
       "checkoutName": "Kanna, Online — Experience (28 November)",
       "checkoutDescription": "Live online gathering, Saturday 28 November, 19:00 CET / 20:00 SAST. Join link sent by email on the day.",
       "priceInCents": 2000,
+      "mantisShareCents": 1500,
       "requiresShipping": false,
       "includesSample": false,
-      "includesBottle": false,
-      "givebackCents": 0
+      "includesBottle": false
     },
     {
       "id": "experience-sample",
@@ -31,10 +31,10 @@
       "checkoutName": "Kanna, Online — Experience + 5ml Sample",
       "checkoutDescription": "Live online gathering plus a 5ml sample of Bushman's Blessing Kanna Tincture, posted to arrive before the evening.",
       "priceInCents": 3000,
+      "mantisShareCents": 1500,
       "requiresShipping": true,
       "includesSample": true,
-      "includesBottle": false,
-      "givebackCents": 0
+      "includesBottle": false
     },
     {
       "id": "experience-bottle",
@@ -42,10 +42,10 @@
       "checkoutName": "Kanna, Online — Experience + Full Bottle",
       "checkoutDescription": "Live online gathering plus a full bottle of Bushman's Blessing Kanna Tincture, posted to arrive before the evening.",
       "priceInCents": 6000,
+      "mantisShareCents": 1500,
       "requiresShipping": true,
       "includesSample": false,
-      "includesBottle": true,
-      "givebackCents": 400
+      "includesBottle": true
     }
   ]
 }
