@@ -174,11 +174,11 @@ const OPTION_COPY = {
     blurb: 'The evening, plus a small sample posted to you in time to take part with it.',
     includes: [
       'Everything in the experience',
-      "A few servings of Bushman's Blessing Kanna Tincture",
+      "A sample of Bushman's Blessing Kanna Tincture",
       'Posted to arrive before 28 November',
       'EU & UK delivery',
     ],
-    note: 'A taste rather than a full bottle — enough to meet the plant for the first time, in company.',
+    note: 'Enough to meet the plant for the first time, in company.',
   },
   'experience-bottle': {
     badge: 'The full bottle',
