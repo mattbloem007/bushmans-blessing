@@ -11,6 +11,7 @@ import WavyDivider from '../../components/WavyDivider'
 import EntopticDots from '../../components/icons/EntopticDots'
 import { useInView } from '../../hooks/useInView'
 import KannaOnlineCheckoutButton from '../../components/KannaOnlineCheckoutButton'
+import KannaOnlineStickyCta from '../../components/KannaOnlineStickyCta'
 
 const { event, bundleCutoff, options } = config
 const CHEAPEST = Math.min(...options.map(option => option.priceInCents))
@@ -30,7 +31,7 @@ function Chapter({ id, eyebrow, title, tone = 'light', className = '', children 
   return (
     <section
       id={id}
-      className={`relative py-24 md:py-32 px-6 ${dark ? 'grain' : ''}`}
+      className={`relative scroll-mt-20 py-24 md:py-32 px-6 ${dark ? 'grain' : ''}`}
       style={{
         background: dark
           ? 'var(--color-black-900)'
@@ -72,6 +73,41 @@ function P({ dark = false, size = 'md', className = '', children }) {
     >
       {children}
     </p>
+  )
+}
+
+const JUMP_LINKS = [
+  { href: '#plant', label: 'The plant' },
+  { href: '#science', label: 'The science' },
+  { href: '#messenger', label: 'Ancient messenger' },
+  { href: '#whole-plant', label: 'Whole plant' },
+  { href: '#balance', label: 'Balance' },
+  { href: '#evening', label: 'The evening' },
+  { href: '#practicalities', label: 'Practicalities' },
+]
+
+// A last-chance exit from the reading, at the end of the chapters people are
+// most likely to abandon. Two choices: the evening itself, or the prices.
+function SkipAhead({ dark = false, note = 'Reading not for you today?' }) {
+  const quiet = dark ? 'text-dust-grey-200/70' : 'text-dust-grey-600'
+  const link = dark ? 'text-dust-grey-100' : 'text-dust-grey-950'
+  return (
+    <div
+      className={`mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-5 text-xs uppercase tracking-[0.18em] ${
+        dark ? 'border-dust-grey-200/20' : 'border-dust-grey-950/10'
+      }`}
+    >
+      <span className={quiet}>{note}</span>
+      <a href="#evening" className={`${link} no-underline hover:text-rusty-spice-500 transition-colors`}>
+        What happens on the night →
+      </a>
+      <a
+        href="#reserve"
+        className="text-rusty-spice-500 no-underline hover:text-rusty-spice-600 transition-colors"
+      >
+        Prices &amp; sign up →
+      </a>
+    </div>
   )
 }
 
@@ -292,9 +328,12 @@ export default function KannaOnlinePage() {
           >
             Kanna, Online
           </h1>
-          <p className="text-dust-grey-200 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
-            One plant, one evening, and a room full of people paying attention. An invitation to meet
-            Kanna the way it has always been met — slowly, in company, with time enough to notice.
+          <p className="text-dust-grey-200 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
+            An evening of story, science and unhurried attention, with one of the oldest plant
+            relationships on earth — met the way it has always been met: slowly, and in company.
+          </p>
+          <p className="text-dust-grey-200/70 text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-10">
+            Cameras optional. Microphones optional. Nothing required but a little time.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10 text-sm text-dust-grey-200">
@@ -319,12 +358,49 @@ export default function KannaOnlinePage() {
               Read the story
             </a>
           </div>
+
+          <p className="mt-6 text-xs uppercase tracking-[0.18em] text-dust-grey-200/60">
+            <a
+              href="#reserve"
+              className="no-underline hover:text-rusty-spice-500 transition-colors"
+            >
+              Already decided? Skip to the details →
+            </a>
+          </p>
         </div>
 
         <div className="absolute bottom-8 left-0 right-0 px-8 opacity-10">
           <WavyDivider color="var(--color-dust-grey-200)" />
         </div>
       </section>
+
+      {/* ── Jump nav ─────────────────────────────────────────────────────── */}
+      <nav
+        aria-label="Sections on this page"
+        className="border-b border-dust-grey-200/60 px-6 py-4"
+        style={{ background: 'var(--color-dust-grey-100)' }}
+      >
+        <div className="mx-auto max-w-5xl flex flex-nowrap items-baseline gap-x-5 gap-y-2 overflow-x-auto whitespace-nowrap sm:flex-wrap sm:justify-center sm:overflow-visible">
+          <span className="text-dust-grey-600 text-[0.6rem] uppercase tracking-[0.22em]">
+            Jump to
+          </span>
+          {JUMP_LINKS.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-dust-grey-950/80 hover:text-rusty-spice-500 text-[0.7rem] uppercase tracking-[0.16em] no-underline transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="#reserve"
+            className="text-rusty-spice-500 hover:text-rusty-spice-600 text-[0.7rem] uppercase tracking-[0.16em] no-underline transition-colors"
+          >
+            Prices &amp; sign up
+          </a>
+        </div>
+      </nav>
 
       {/* ── Invitation ───────────────────────────────────────────────────── */}
       <Chapter
@@ -362,6 +438,7 @@ export default function KannaOnlinePage() {
 
       {/* ── The plant ────────────────────────────────────────────────────── */}
       <Chapter
+        id="plant"
         tone="mid"
         eyebrow="Chapter One"
         title="A relationship without beginning"
@@ -399,10 +476,17 @@ export default function KannaOnlinePage() {
             </div>
           </div>
         </div>
+        <SkipAhead note="That is the short version of the story." />
       </Chapter>
 
       {/* ── Science ──────────────────────────────────────────────────────── */}
-      <Chapter eyebrow="Chapter Two" title="What the science describes" tone="dark" className="max-w-6xl">
+      <Chapter
+        id="science"
+        eyebrow="Chapter Two"
+        title="What the science describes"
+        tone="dark"
+        className="max-w-6xl"
+      >
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
           <EntopticDots
             rows={5}
@@ -467,10 +551,17 @@ export default function KannaOnlinePage() {
             </P>
           </div>
         </div>
+        <SkipAhead dark note="The rest is the story of the plant itself." />
       </Chapter>
 
       {/* ── Ancient messenger ────────────────────────────────────────────── */}
-      <Chapter eyebrow="Chapter Three" title="An ancient messenger" tone="dark" className="max-w-2xl text-center">
+      <Chapter
+        id="messenger"
+        eyebrow="Chapter Three"
+        title="An ancient messenger"
+        tone="dark"
+        className="max-w-2xl text-center"
+      >
         <div className="space-y-6">
           <P dark>
             Serotonin is older than the nervous system itself. It exists in plants, in gut bacteria, in
@@ -493,7 +584,12 @@ export default function KannaOnlinePage() {
       </Chapter>
 
       {/* ── Whole plant ──────────────────────────────────────────────────── */}
-      <Chapter eyebrow="Chapter Four" title="Whole plant, whole effect" className="max-w-3xl">
+      <Chapter
+        id="whole-plant"
+        eyebrow="Chapter Four"
+        title="Whole plant, whole effect"
+        className="max-w-3xl"
+      >
         <div className="space-y-6">
           <P>
             The alkaloids do not work in isolation. The traditional fermentation — leaves and stems
@@ -517,7 +613,13 @@ export default function KannaOnlinePage() {
       </Chapter>
 
       {/* ── Balance ──────────────────────────────────────────────────────── */}
-      <Chapter eyebrow="Chapter Five" title="A different kind of balance" tone="mid" className="max-w-3xl">
+      <Chapter
+        id="balance"
+        eyebrow="Chapter Five"
+        title="A different kind of balance"
+        tone="mid"
+        className="max-w-3xl"
+      >
         <div className="space-y-6">
           <P>
             We live in a world largely optimised for dopamine — the brain’s seeking and reward system,
@@ -535,10 +637,11 @@ export default function KannaOnlinePage() {
             That is the territory we will be exploring together: not a peak, a settling.
           </P>
         </div>
+        <SkipAhead note="That is what the evening is for." />
       </Chapter>
 
       {/* ── The evening ──────────────────────────────────────────────────── */}
-      <Chapter eyebrow="The evening" title="What the evening holds" className="max-w-4xl">
+      <Chapter id="evening" eyebrow="The evening" title="What the evening holds" className="max-w-4xl">
         <ol className="space-y-8">
           {EVENING.map((item, i) => (
             <li key={item.title} className="flex gap-6">
@@ -568,7 +671,13 @@ export default function KannaOnlinePage() {
       </Chapter>
 
       {/* ── How it works ─────────────────────────────────────────────────── */}
-      <Chapter eyebrow="Practicalities" title="How it works online" tone="mid" className="max-w-4xl">
+      <Chapter
+        id="practicalities"
+        eyebrow="Practicalities"
+        title="How it works online"
+        tone="mid"
+        className="max-w-4xl"
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {STEPS.map((step, i) => (
             <div key={step.title} className="border-t border-dust-grey-950/15 pt-5">
@@ -623,7 +732,7 @@ export default function KannaOnlinePage() {
       </Chapter>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <Chapter eyebrow="Questions" title="Before you decide" className="max-w-3xl">
+      <Chapter id="faq" eyebrow="Questions" title="Before you decide" className="max-w-3xl">
         <div className="divide-y divide-dust-grey-200 border-y border-dust-grey-200">
           {FAQ.map(item => (
             <details key={item.q} className="group py-5">
@@ -646,7 +755,8 @@ export default function KannaOnlinePage() {
 
       {/* ── Final CTA ────────────────────────────────────────────────────── */}
       <section
-        className="grain relative py-24 md:py-32 px-6 text-center overflow-hidden"
+        id="final-cta"
+        className="grain relative scroll-mt-20 py-24 md:py-32 px-6 text-center overflow-hidden"
         style={{ background: 'var(--color-black-950)' }}
       >
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
@@ -685,6 +795,12 @@ export default function KannaOnlinePage() {
           before trying it.
         </p>
       </section>
+
+      <KannaOnlineStickyCta
+        dateLabel={event.dateLabel}
+        timeLabel={event.timeLabel}
+        priceLabel={formatPrice(CHEAPEST)}
+      />
     </Layout>
   )
 }
@@ -723,6 +839,9 @@ export function Head({ location, data }) {
       />
       {/* Temporary sales page: reachable by link, kept out of search. */}
       <meta name="robots" content="noindex, nofollow" />
+      {/* The page is long and offers jump links; smooth scrolling keeps those
+          jumps legible instead of teleporting. */}
+      <style>{`html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}`}</style>
     </>
   )
 }
