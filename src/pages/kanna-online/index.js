@@ -549,19 +549,6 @@ export default function KannaOnlinePage() {
             <figure>
               <StaticImage
                 src="../../images/kanna-online/kanna-habitat-1.jpg"
-                alt="Kanna growing low among the shrubs of the semi-arid Karoo"
-                layout="fullWidth"
-                aspectRatio={4 / 3}
-                placeholder="blurred"
-                className="rounded-lg overflow-hidden"
-              />
-              <figcaption className="mt-3 text-dust-grey-600 text-xs leading-relaxed">
-                Kanna where it grows: the semi-arid Karoo.
-              </figcaption>
-            </figure>
-            <figure>
-              <StaticImage
-                src="../../images/kanna-online/kanna-habitat-2.jpg"
                 alt="Kanna in its natural environment after the winter rains"
                 layout="fullWidth"
                 aspectRatio={4 / 3}
@@ -571,6 +558,19 @@ export default function KannaOnlinePage() {
               <figcaption className="mt-3 text-dust-grey-600 text-xs leading-relaxed">
                 Semi-arid desert after the winter rains — greener than you would expect. The plant
                 stores what it needs and waits for the season that calls it forward.
+              </figcaption>
+            </figure>
+            <figure>
+              <StaticImage
+                src="../../images/kanna-online/kanna-habitat-2.jpg"
+                alt="Kanna growing low among the shrubs of the semi-arid Karoo"
+                layout="fullWidth"
+                aspectRatio={4 / 3}
+                placeholder="blurred"
+                className="rounded-lg overflow-hidden"
+              />
+              <figcaption className="mt-3 text-dust-grey-600 text-xs leading-relaxed">
+                Kanna where it grows: the semi-arid Karoo.
               </figcaption>
             </figure>
           </div>
