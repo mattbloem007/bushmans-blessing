@@ -417,11 +417,12 @@ export default function KannaOnlinePage() {
             carry stressors that our nervous systems were not built to hold for long periods.
           </P>
           <P>
-            Kanna can support the nervous system by grounding the energy in the body, bringing deeper
-            levels of presence. With a grounded presence we can deal with ongoing stimuli at a better
-            capacity without getting overwhelmed. This state of being also helps us be in better
-            connection to the people and environment around us — creating a better sense of
-            connection and, ultimately, an overall sense of wellbeing.
+            Ask anyone who works with kanna what it does and the answer tends to arrive in the body
+            before it arrives in words: energy settling, the shoulders dropping, attention coming back
+            into the room. The word that comes up is grounding. With a grounded presence we can deal
+            with ongoing stimuli at a better capacity without getting overwhelmed. This state of being
+            also helps us be in better connection to the people and environment around us — creating a
+            better sense of connection and, ultimately, an overall sense of wellbeing.
           </P>
           <P>
             On {event.dateLabel} we are gathering online to experience exactly that: one evening, in
@@ -489,8 +490,8 @@ export default function KannaOnlinePage() {
             <P>
               Bushman’s Blessing is named for the kanna that was presented to our founder — kanna of
               the original way. Grown in its original environment, cultivated and prepared
-              traditionally, the medicine keeps intact the very essence of how the First People
-              engaged with life: through presence and connection.
+              traditionally, the preparation keeps intact the essence of how the First People engaged
+              with life: through presence and connection.
             </P>
             <P>
               The Bush people’s way of life, preserved in the essence of kanna, is now offered back to
@@ -498,12 +499,15 @@ export default function KannaOnlinePage() {
               while engaging with the life we live today.
             </P>
             <P>
-              Kanna supports the nervous system to deal with stressors, just as it has done for itself
-              in the harsh environments of the semi-arid deserts of South Africa. It lends to us the
-              same preservation and endurance to withstand tough times: to draw in and be efficient
-              with our energy and resources, to store and prepare for the good times when conditions
-              are right for expansion and growth. In this original preparation, it is an adaptogen, a
-              tonic, a nourishment for every cell in our body.
+              Kanna keeps itself alive in one of the hardest climates on earth. It draws in, holds
+              what it has, and waits for the season that calls it forward — and that is the quality the
+              old preparations were prized for, and made to keep. It is a lesson in economy rather than
+              force: draw in, hold your reserves, endure the dry spell, expand when the rain comes. The
+              Bush people spoke about the plant in exactly this language — weather, season, stores,
+              survival. In this original preparation it is a tonic in the old sense — taken in small
+              amounts, regularly, as part of how you look after yourself. People often reach for the
+              word “adaptogen”; it is a modern word with no agreed definition, and we use it knowing
+              that.
             </P>
           </div>
         </div>
@@ -522,7 +526,8 @@ export default function KannaOnlinePage() {
 
         <P className="mt-10">
           We honour this ancient wisdom and the relation with this sacred plant, and the custodians
-          of kanna. Kanna is a revered plant, a teacher and a healer.
+          of kanna. Kanna is a revered plant: a teacher first, and — in the language of the people who
+          have kept it — a healer.
         </P>
 
         <div className="mt-14 flex items-end justify-center gap-10 opacity-30">
