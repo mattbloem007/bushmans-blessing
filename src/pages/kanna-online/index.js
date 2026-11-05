@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { graphql, Link } from 'gatsby'
+import { StaticImage } from 'gatsby-plugin-image'
 import config from '../../../shared/kanna-online.json'
 import Layout from '../../components/Layout'
 import Seo from '../../components/Seo'
@@ -84,6 +85,7 @@ const JUMP_LINKS = [
   { href: '#balance', label: 'Balance' },
   { href: '#evening', label: 'The evening' },
   { href: '#practicalities', label: 'Practicalities' },
+  { href: '#facilitator', label: 'Facilitator' },
 ]
 
 // A last-chance exit from the reading, at the end of the chapters people are
@@ -114,23 +116,23 @@ function SkipAhead({ dark = false, note = 'Reading not for you today?' }) {
 const EVENING = [
   {
     title: 'Arriving',
-    text: 'We open with a few minutes to land — who you are, where you are joining from, and what brought you here. No performance, no introductions you have to rehearse.',
+    text: 'We open with a few minutes to land in presence together.',
   },
   {
     title: 'The story',
-    text: 'Kanna and the First People, the names the plant has carried, and the fermentation that turns a plant into a practice. The longest part of the evening, and the one worth taking slowly.',
+    text: 'Giving a space and a voice for Kanna and the First People, the names the plant has carried, and the preparations that make this medicine.',
   },
   {
     title: 'The science, plainly',
-    text: 'Mesembrine, mesembrenone, and what research has actually observed. No jargon, and no overclaiming — we will be as honest about what is not yet known as about what is.',
+    text: 'Mesembrine, mesembrenone, and what research has observed about kanna.',
   },
   {
     title: 'The felt sense',
-    text: 'A guided practice in paying attention: to breath, to body, to whatever is moving under the surface. If you have a sample or a bottle, this is where you would take it. Nobody has to, and nobody will be asked to report on it.',
+    text: 'A guided practice in paying attention: to breath, to embody, to be present with whatever is moving under the surface. If you have a sample or a bottle of Bushman’s Blessing, this is where you would take it. It isn’t a prerequisite to joining — the circle together is enough to feel the presence of what Kanna has to offer us. The taking of the sacrament enhances the experience.',
   },
   {
     title: 'The circle',
-    text: 'An unhurried, optional space to say what you noticed — or to say nothing at all. Usually the part people remember afterwards.',
+    text: 'An optional time to say what you noticed — or to say nothing at all. Usually the part people remember afterwards. We will share stories of what kanna has to offer mankind in our individual lives in this modern-day world.',
   },
   {
     title: 'Closing',
@@ -149,7 +151,7 @@ const STEPS = [
   },
   {
     title: 'The link, on the day',
-    text: `A few hours before we begin, the ${event.platform} link is sent to that same address. No account, no app — it opens in your browser.`,
+    text: `A few hours before we begin, the ${event.platform} video link is sent to that same address.`,
   },
   {
     title: 'Bundles by 21 November',
@@ -216,7 +218,7 @@ const FAQ = [
   },
   {
     q: 'Is any of this medical?',
-    a: "No. Kanna is a botanical preparation, not a medicine. Nothing on this page or in the evening is medical advice, diagnosis or treatment, and we will not present it as such. If you are pregnant, breastfeeding, or taking prescribed medication, please speak to your doctor before trying it.",
+    a: 'Not in the clinical sense. Kanna is a botanical preparation, and when we call it a medicine we mean it in the old way — a plant prepared with care and taken with attention, not a pharmaceutical. Nothing on this page or in the evening is medical advice, diagnosis or treatment, and we will not present it as such. If you are pregnant, breastfeeding, or taking prescribed medication, please speak to your doctor before trying it.',
   },
   {
     q: 'What if my plans change?',
@@ -329,11 +331,11 @@ export default function KannaOnlinePage() {
             Kanna, Online
           </h1>
           <p className="text-dust-grey-200 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
-            An evening of story, science and unhurried attention, with one of the oldest plant
-            relationships on earth — met the way it has always been met: slowly, and in company.
+            An evening together to drop into presence with the Spirit of Kanna — an ally and teacher
+            for humanity. The heart opener. The one who calls us into presence and deeper connection.
           </p>
           <p className="text-dust-grey-200/70 text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-10">
-            Cameras optional. Microphones optional. Nothing required but a little time.
+            Cameras and microphones optional. You are welcome to simply come, listen and experience.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10 text-sm text-dust-grey-200">
@@ -411,24 +413,24 @@ export default function KannaOnlinePage() {
       >
         <div className="space-y-6">
           <P>
-            We carry devices that can summon almost anything in seconds. Our attention is pulled in a
-            hundred directions at once — notifications, news cycles, feeds engineered to keep us
-            scrolling. And alongside all that connection, something has been quietly eroding: the
-            ability to sit with another person, and actually be there. Undistracted. Unhurried.
-            Present.
+            We live in a world of fast-paced lives, over-stimulation, and disconnection from nature. We
+            carry stressors that our nervous systems were not built to hold for long periods.
           </P>
           <P>
-            Kanna was never taken alone, or in a hurry, or on the move. It was chewed slowly, in
-            company, as a reason to stay somewhere a little longer. That is the practice — not the
-            plant on its own, but the plant and the circle around it.
+            Kanna can support the nervous system by grounding the energy in the body, bringing deeper
+            levels of presence. With a grounded presence we can deal with ongoing stimuli at a better
+            capacity without getting overwhelmed. This state of being also helps us be in better
+            connection to the people and environment around us — creating a better sense of
+            connection and, ultimately, an overall sense of wellbeing.
           </P>
           <P>
-            On {event.dateLabel} we are gathering online to do exactly that: one
-            evening, a small group, and enough unhurried time to tell the story properly, look honestly
-            at what the science has found, and sit together with whatever the plant brings up.
+            On {event.dateLabel} we are gathering online to experience exactly that: one evening, in
+            circle together online, with enough time to tell the story properly, look honestly at what
+            the science has found, and sit together with whatever the plant brings up.
           </P>
           <P className="text-dust-grey-950">
-            Cameras optional. Microphones optional. You are welcome to simply listen.
+            Cameras and microphones are optional. You are welcome to simply come, listen and
+            experience.
           </P>
         </div>
         <div className="mt-12 opacity-20">
@@ -442,42 +444,133 @@ export default function KannaOnlinePage() {
         tone="mid"
         eyebrow="Chapter One"
         title="A relationship without beginning"
-        className="max-w-6xl"
+        className="max-w-3xl"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div className="space-y-6">
+          <P>
+            There is a moment, somewhere in the deep past of Southern Africa, that we will never be
+            able to pinpoint. A group of people, deeply connected to their environment — the First
+            People of this land — listened to the call of a small, fleshy plant growing in the desert
+            of the Karoo. Whispered to them from the inner knowing that comes from living so
+            intimately with Nature.
+          </P>
+          <P>
+            That calling led to a very important relationship with a plant now deeply revered by
+            these people. It could be one of the oldest relationships between a human being and a
+            plant that we are aware of, anywhere on earth.
+          </P>
+          <P>
+            The /Xam-speaking Bush people and the Khoekhoe people became the natural custodians of
+            this plant. Though their culture and way of life as distinct, independent groups have been
+            profoundly altered — and some say their culture as it once was is now extinct — their
+            essence is still lived on through their descendants, adapted to the modern world. They
+            lived in harmony and reciprocity with nature, holding a deep relationship with each other
+            and the environment around them.
+          </P>
+          <P>
+            The plant has carried many names. <em>Sceletium tortuosum</em> is the botanical name.
+            Kanna to those who first gathered it. <em>Kougoed</em> — “something to chew” — to the
+            people who communed with it daily. That last name tells you what their relationship was
+            with the plant: a companion. Carried on long hunts. Offered at moments of grief. Shared
+            around fires in conversations that needed opening. Present in trance dances. Kanna entered
+            their lives from the sacred moments to the mundane, because they believed every part of
+            life is sacred — not just the times of great trance.
+          </P>
+        </div>
+
+        <div className="mt-14 border-t border-dust-grey-950/10 pt-10">
+          <h3
+            className="text-dust-grey-950 mb-5"
+            style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', lineHeight: '1.25' }}
+          >
+            The Bushman’s Blessing
+          </h3>
           <div className="space-y-6">
             <P>
-              There is a moment, somewhere in the deep past of Southern Africa, that we will never be
-              able to pinpoint. A person — one of the First People of this land — bent toward a small,
-              fleshy plant growing in the desert of the Karoo. Perhaps it was hunger that led them
-              there. Perhaps curiosity. Perhaps something closer to the knowing that comes from living
-              so intimately with a landscape that the plants begin to speak.
+              Bushman’s Blessing is named for the kanna that was presented to our founder — kanna of
+              the original way. Grown in its original environment, cultivated and prepared
+              traditionally, the medicine keeps intact the very essence of how the First People
+              engaged with life: through presence and connection.
             </P>
             <P>
-              Whatever led them there, what followed was a relationship. One of the oldest between a
-              human being and a plant that we are aware of, anywhere on earth.
+              The Bush people’s way of life, preserved in the essence of kanna, is now offered back to
+              the modern world as a blessing. It is a reminder of how we can live in the same way
+              while engaging with the life we live today.
             </P>
             <P>
-              The plant has carried many names. <em>Sceletium tortuosum</em> to the botanists. Kanna to
-              those who first gathered it. <em>Kougoed</em> — “something to chew” — to the people who
-              worked with it daily. That last name tells you what it was: not a rare thing locked away
-              for special occasions, but a companion. Carried on long hunts. Offered at moments of
-              grief. Shared around fires in conversations that needed opening.
+              Kanna supports the nervous system to deal with stressors, just as it has done for itself
+              in the harsh environments of the semi-arid deserts of South Africa. It lends to us the
+              same preservation and endurance to withstand tough times: to draw in and be efficient
+              with our energy and resources, to store and prepare for the good times when conditions
+              are right for expansion and growth. In this original preparation, it is an adaptogen, a
+              tonic, a nourishment for every cell in our body.
             </P>
-            <P className="text-dust-grey-950 italic" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.25rem' }}>
-              A companion for arrival, not escape.
-            </P>
-          </div>
-          <div className="flex flex-col items-center gap-10">
-            <ElandSilhouette size={220} color="#d0672f" className="opacity-40" />
-            <div className="flex items-end gap-10">
-              <BushmanFigure size={96} color="#d0672f" className="opacity-30" />
-              <RunningSpottedFigure size={96} color="#d0672f" className="opacity-30" />
-            </div>
           </div>
         </div>
+
+        <blockquote className="mt-12 border-l-2 border-saddle-brown-500 pl-6">
+          <P size="sm">
+            A /Xam-speaking Berg Bushman from the 17th century described the plant as “a small plant
+            found on the great mountains, growing out of crevices in the rocks”. He noted it was
+            “chewed by Bushmen, giving strength to their limbs, taking away poison, and making their
+            memory strong”. In one story recorded by a European encounter with two Berg Bushmen from
+            Stuurmansfontein, it was mentioned that they had kanna with them to enable them to walk
+            until they met the wagon — suggesting that kanna sustained them for long distances of
+            travel on foot.
+          </P>
+        </blockquote>
+
+        <P className="mt-10">
+          We honour this ancient wisdom and the relation with this sacred plant, and the custodians
+          of kanna. Kanna is a revered plant, a teacher and a healer.
+        </P>
+
+        <div className="mt-14 flex items-end justify-center gap-10 opacity-30">
+          <ElandSilhouette size={180} color="#d0672f" className="opacity-70" />
+          <BushmanFigure size={84} color="#d0672f" />
+          <RunningSpottedFigure size={84} color="#d0672f" />
+        </div>
+
         <SkipAhead note="That is the short version of the story." />
       </Chapter>
+
+      {/* ── Kanna in its habitat ────────────────────────────────────────── */}
+      <section
+        className="px-6 py-14 md:py-20"
+        style={{ background: 'var(--color-dust-grey-100)' }}
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-8">
+            <figure>
+              <StaticImage
+                src="../../images/kanna-online/kanna-habitat-1.jpg"
+                alt="Kanna growing low among the shrubs of the semi-arid Karoo"
+                layout="fullWidth"
+                aspectRatio={4 / 3}
+                placeholder="blurred"
+                className="rounded-lg overflow-hidden"
+              />
+              <figcaption className="mt-3 text-dust-grey-600 text-xs leading-relaxed">
+                Kanna where it grows: the semi-arid Karoo.
+              </figcaption>
+            </figure>
+            <figure>
+              <StaticImage
+                src="../../images/kanna-online/kanna-habitat-2.jpg"
+                alt="Kanna in its natural environment after the winter rains"
+                layout="fullWidth"
+                aspectRatio={4 / 3}
+                placeholder="blurred"
+                className="rounded-lg overflow-hidden"
+              />
+              <figcaption className="mt-3 text-dust-grey-600 text-xs leading-relaxed">
+                Semi-arid desert after the winter rains — greener than you would expect. The plant
+                stores what it needs and waits for the season that calls it forward.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
 
       {/* ── Science ──────────────────────────────────────────────────────── */}
       <Chapter
@@ -574,8 +667,10 @@ export default function KannaOnlinePage() {
             generations of careful attention, science is only now learning to describe in precise
             terms.
           </P>
-          <P dark className="italic">
-            The relationship is ancient. The science is young. They are pointing toward the same thing.
+          <P dark>
+            The idea is that communication with all living things is the key to a harmonious way of
+            living. Every cell informed, or every being informed, creates a sense of connection that
+            manifests as the dance of life.
           </P>
         </div>
         <div className="mt-14 opacity-30 flex justify-center">
@@ -588,27 +683,49 @@ export default function KannaOnlinePage() {
         id="whole-plant"
         eyebrow="Chapter Four"
         title="Whole plant, whole effect"
-        className="max-w-3xl"
+        className="max-w-6xl"
       >
-        <div className="space-y-6">
-          <P>
-            The alkaloids do not work in isolation. The traditional fermentation — leaves and stems
-            pressed together and left to undergo a slow, deliberate transformation, then dried in the
-            open sun and turned by hand — changes the plant’s chemistry in ways that affect how the
-            body receives it.
-          </P>
-          <P>
-            This is why we work with the whole plant rather than extracts or isolates. A tincture built
-            around one compound is a different thing entirely. It is not simply a delivery mechanism
-            for mesembrine: the preparation is part of the effect, and what makes Kanna what it is
-            cannot be separated from how it was made.
-          </P>
-          <P>
-            Ours begins in the Baviaanskloof, a mountain wilderness where several of South Africa’s
-            rarest biomes meet, grown low to the ground in the dappled shade of other dwarf shrubs. It
-            is prepared with the plant keepers of Southern Africa, in the old way — not because that is
-            romantic, but because something is lost when it is done any other way.
-          </P>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+          <div className="lg:col-span-3 space-y-6">
+            <P>
+              The alkaloids do not work in isolation. The traditional fermentation — leaves, stems and
+              roots pressed together and left to undergo a slow, deliberate transformation, then dried
+              in the open sun and turned by hand — changes the plant’s chemistry in ways that affect
+              how the body receives it.
+            </P>
+            <P>
+              This is why we work with the whole plant rather than extracts or isolates. The
+              preparation is part of the effect, and what makes Kanna what it is cannot be separated
+              from how it was made.
+            </P>
+            <P>
+              Ours begins in the Baviaanskloof, a mountain wilderness where several of South Africa’s
+              rarest biomes meet, grown low to the ground in the dappled shade of other dwarf shrubs.
+              It is prepared by a devoted plant keeper of South Africa, in the old way — because that
+              is the way that brings out the magic of the plant.
+            </P>
+            <P>
+              Modern approaches to sharing the medicine often remove the spirit of kanna, focusing
+              only on applicable alkaloids for consumption. Our evening together is about creating
+              space for the original essence of kanna to be presented to you. We will be calling in an
+              activation to facilitate the meeting of the teacher and ally we call kanna, bringing us
+              into deep presence in the body, gathered together.
+            </P>
+          </div>
+
+          <figure className="lg:col-span-2 lg:sticky lg:top-24">
+            <StaticImage
+              src="../../images/kanna-online/kanna-habitat-3.jpg"
+              alt="Kanna in its natural habitat in the semi-arid mountains of South Africa"
+              layout="fullWidth"
+              aspectRatio={3 / 4}
+              placeholder="blurred"
+              className="rounded-lg overflow-hidden"
+            />
+            <figcaption className="mt-3 text-dust-grey-600 text-xs leading-relaxed">
+              Grown in its original environment, prepared in the old way.
+            </figcaption>
+          </figure>
         </div>
       </Chapter>
 
@@ -634,7 +751,8 @@ export default function KannaOnlinePage() {
             itself.
           </P>
           <P className="text-dust-grey-950 italic" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.25rem' }}>
-            That is the territory we will be exploring together: not a peak, a settling.
+            That is the territory we will be exploring together: not a peak experience, a deeper
+            settling.
           </P>
         </div>
         <SkipAhead note="That is what the evening is for." />
@@ -664,9 +782,9 @@ export default function KannaOnlinePage() {
           ))}
         </ol>
         <p className="mt-10 text-dust-grey-600 text-sm leading-relaxed">
-          We finish after {event.durationLabel}, and stay on a little longer for anyone who wants to keep
-          talking. You will need a quiet-ish room, headphones if you have them, and a browser. Nothing
-          else.
+          We finish after about 90 minutes, and stay on a little longer for anyone who wants to keep
+          talking. You will need a quiet-ish room, headphones if you have them, and a laptop or phone
+          to tune into the call.
         </p>
       </Chapter>
 
@@ -695,6 +813,53 @@ export default function KannaOnlinePage() {
           Places are limited so the room stays a room. Checkout, receipts and the join link all come
           through Stripe and email — there is no account to create.
         </p>
+      </Chapter>
+
+      {/* ── Facilitator ──────────────────────────────────────────────────── */}
+      <Chapter
+        id="facilitator"
+        eyebrow="A note on the facilitator"
+        title="The one who introduces the Kanna"
+        className="max-w-5xl"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 lg:gap-16 items-start">
+          <figure className="md:col-span-2 md:sticky md:top-24">
+            <StaticImage
+              src="../../images/kanna-online/matthew.jpg"
+              alt="Matthew Bloemetje, facilitator of the Kanna Online gathering"
+              layout="fullWidth"
+              aspectRatio={3 / 4}
+              placeholder="blurred"
+              className="rounded-lg overflow-hidden"
+            />
+            <figcaption className="mt-3 text-dust-grey-600 text-xs leading-relaxed">
+              Matthew Bloemetje, facilitator.
+            </figcaption>
+          </figure>
+
+          <div className="md:col-span-3 space-y-6">
+            <P>
+              The storyteller and facilitator for the evening, who will introduce the Kanna for us, is
+              our partner who helped found Bushman’s Blessing — educating us on the original essence
+              of Kanna, in its entirety.
+            </P>
+            <P>
+              Matthew Bloemetje is a modern-day Bushman residing in South Africa. He grew up knowing
+              only the modern ways of life before his first awakening in early 2015, which led to a
+              remembering of an older way of living deep in his DNA. As an initiated traditional healer
+              and herbalist of Southern Africa, he walks the path of remembrance in honour of his
+              ancestors who walked before him, recognising his modern upbringing and integrating the
+              depth of indigenous wisdom.
+            </P>
+            <P>
+              In bringing forward the medicine of Kanna, Matthew recognises his connection to the
+              Khoekhoe and /Xam Bush people in his lineage, who are the rightful custodians of Kanna.
+              Years of devotion and practice with Kanna have unlocked ancient wisdom that we are here
+              to share with the world. The traditional preparations of Kanna, grown in its natural
+              habitat, maintain the essence and integrity of the plant.
+            </P>
+          </div>
+        </div>
       </Chapter>
 
       {/* ── Reserve ──────────────────────────────────────────────────────── */}
@@ -789,10 +954,11 @@ export default function KannaOnlinePage() {
       {/* ── Disclaimer ───────────────────────────────────────────────────── */}
       <section className="px-6 py-10 bg-dust-grey-50">
         <p className="max-w-3xl mx-auto text-dust-grey-600 text-xs leading-relaxed text-center italic">
-          Kanna is a botanical preparation, not a medicine. It is not intended to diagnose, treat, cure
-          or prevent any disease, and nothing on this page or in the gathering is medical advice. If you
-          are pregnant, breastfeeding, or taking prescribed medication, please speak to your doctor
-          before trying it.
+          Kanna is a botanical preparation. We use the word “medicine” in its older, traditional
+          sense — a plant prepared with care — not as a pharmaceutical claim. Nothing on this page or
+          in the gathering is medical advice, diagnosis or treatment. If you are pregnant,
+          breastfeeding, or taking prescribed medication, please speak to your doctor before trying
+          it.
         </p>
       </section>
 
@@ -808,7 +974,7 @@ export default function KannaOnlinePage() {
 export function Head({ location, data }) {
   const site = data.site.siteMetadata
   const title = `Kanna, Online — a live gathering, ${event.dateLabel} | ${site.title}`
-  const description = `An evening with Kanna — the story, the science and the felt sense, gathered online on ${event.dateLabel}. Places from ${formatPrice(CHEAPEST)}.`
+  const description = `An evening with Kanna — the story, the science and the felt sense, with Matthew Bloemetje. Live online on ${event.dateLabel}. Places from ${formatPrice(CHEAPEST)}.`
 
   return (
     <>
@@ -817,6 +983,7 @@ export function Head({ location, data }) {
         description={description}
         canonical={`${site.siteUrl}${location.pathname}`}
         ogType="website"
+        ogImage={`${site.siteUrl}/images/kanna-online/og.jpg`}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Event',
@@ -826,6 +993,8 @@ export function Head({ location, data }) {
           eventStatus: 'https://schema.org/EventScheduled',
           description,
           url: `${site.siteUrl}/kanna-online/`,
+          image: [`${site.siteUrl}/images/kanna-online/og.jpg`],
+          performer: { '@type': 'Person', name: 'Matthew Bloemetje' },
           organizer: { '@type': 'Organization', name: site.title, url: site.siteUrl },
           offers: options.map(option => ({
             '@type': 'Offer',
