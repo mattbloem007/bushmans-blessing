@@ -202,7 +202,7 @@ const FAQ = [
   },
   {
     q: "I've never tried it. Is this a good first time?",
-    a: 'Yes — this is the perfect place to start with kanna: a safe, introductory meeting with the plant, guided by someone who knows it well. The one contraindication is antidepressant or anti-anxiety medication — if you are on either, please speak to your doctor before joining us.',
+    a: 'Yes — this is the perfect place to start with kanna: a safe, introductory meeting with the plant, guided by someone who knows it well. The one contraindication is antidepressant or anti-anxiety medication — and never an MAOI, which must not be combined with kanna. If you are on either, please speak to your doctor before joining us.',
   },
   {
     q: 'What time is that where I am?',
@@ -218,7 +218,7 @@ const FAQ = [
   },
   {
     q: 'Is any of this medical?',
-    a: 'Not in the clinical sense. Kanna is a botanical preparation, and when we call it a medicine we mean it in the old way — a plant prepared with care and taken with attention, not a pharmaceutical. Nothing on this page or in the evening is medical advice, diagnosis or treatment, and we will not present it as such. If you are pregnant, breastfeeding, or taking prescribed medication, please speak to your doctor before trying it.',
+    a: 'Not in the clinical sense. Kanna is a botanical preparation, and when we call it a medicine we mean it in the old way — a plant prepared with care and taken with attention, not a pharmaceutical. Nothing on this page or in the evening is medical advice, diagnosis or treatment, and we will not present it as such. If you are taking antidepressant or anti-anxiety medication — and above all an MAOI — please speak to your doctor before trying it.',
   },
   {
     q: 'What if my plans change?',
@@ -961,9 +961,9 @@ export default function KannaOnlinePage() {
         <p className="max-w-3xl mx-auto text-dust-grey-600 text-xs leading-relaxed text-center italic">
           Kanna is a botanical preparation. We use the word “medicine” in its older, traditional
           sense — a plant prepared with care — not as a pharmaceutical claim. Nothing on this page or
-          in the gathering is medical advice, diagnosis or treatment. If you are pregnant,
-          breastfeeding, or taking prescribed medication, please speak to your doctor before trying
-          it.
+          in the gathering is medical advice, diagnosis or treatment. If you are taking antidepressant
+          or anti-anxiety medication — and above all an MAOI — please speak to your doctor before
+          trying it.
         </p>
       </section>
 

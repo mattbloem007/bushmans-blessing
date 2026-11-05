@@ -12,8 +12,8 @@ const SIGN_OFF = `
   <p style="margin-top:24px;">With care,<br />Bushman's Blessing</p>
   <p style="color:#8a7f72;font-size:12px;line-height:1.5;margin-top:24px;">
     Kanna is a botanical preparation, not a medicine. It is not intended to diagnose, treat, cure or
-    prevent any disease, and nothing in this email is medical advice. If you are pregnant, breastfeeding,
-    or taking prescribed medication, please speak to your doctor before trying it.
+    prevent any disease, and nothing in this email is medical advice. If you are taking antidepressant
+    or anti-anxiety medication — and above all an MAOI — please speak to your doctor before trying it.
   </p>
 `
 
