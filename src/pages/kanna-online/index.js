@@ -202,7 +202,7 @@ const FAQ = [
   },
   {
     q: "I've never tried it. Is this a good first time?",
-    a: 'Yes — a small group and an unhurried pace is a good place to start. If you would like to feel it for the first time with company, take one of the options that includes a sample or a bottle.',
+    a: 'Yes — this is the perfect place to start with kanna: a safe, introductory meeting with the plant, guided by someone who knows it well. The one contraindication is antidepressant or anti-anxiety medication — if you are on either, please speak to your doctor before joining us.',
   },
   {
     q: 'What time is that where I am?',
