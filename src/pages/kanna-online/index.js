@@ -881,7 +881,7 @@ export default function KannaOnlinePage() {
         {MANTIS_SHARE > 0 && (
           <p className="text-dust-grey-950 text-sm mb-10 max-w-2xl border-l-2 border-rusty-spice-500 pl-4">
             {formatPrice(MANTIS_SHARE)} of every place goes directly to Mantis Collective, our partners
-            in Southern Africa.
+            in Southern Africa — on the experience on its own, that is the whole of it.
           </p>
         )}
 
