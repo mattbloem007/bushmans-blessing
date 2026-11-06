@@ -154,7 +154,7 @@ const STEPS = [
     text: `A few hours before we begin, the ${event.platform} video link is sent to that same address.`,
   },
   {
-    title: 'Bundles by 21 November',
+    title: `Bundles by ${bundleCutoff.shortLabel}`,
     text: `Samples and bottles are posted so they reach you before the evening. Order by ${bundleCutoff.label} for a parcel; after that the experience on its own stays open.`,
   },
 ]
@@ -177,7 +177,7 @@ const OPTION_COPY = {
     includes: [
       'Everything in the experience',
       "A sample of Bushman's Blessing Kanna Tincture",
-      'Posted to arrive before 28 November',
+      `Posted to arrive before ${event.dateShortLabel}`,
       'EU & UK delivery',
     ],
     note: 'Enough to meet the plant for the first time, in company.',
@@ -188,7 +188,7 @@ const OPTION_COPY = {
     includes: [
       'Everything in the experience',
       "A full 5ml bottle of Bushman's Blessing Kanna Tincture",
-      'Posted to arrive before 28 November',
+      `Posted to arrive before ${event.dateShortLabel}`,
       'EU & UK delivery',
     ],
     note: 'That same bottle is €44 on its own in the shop.',
